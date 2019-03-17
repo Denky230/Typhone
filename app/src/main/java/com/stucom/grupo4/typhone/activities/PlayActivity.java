@@ -27,7 +27,7 @@ public class PlayActivity extends AppCompatActivity {
     private int cursor;
 
     // Score
-    private final int LETTER_RIGHT = 10;
+    private final int RIGHT_LETTER = 10;
     private TextView txtScore;
     private int score;
 
@@ -56,8 +56,9 @@ public class PlayActivity extends AppCompatActivity {
 
         cursor++;
         // Word completed = go next word
-        if (cursor == txtWord.length())
+        if (cursor == txtWord.length()) {
             updateWordToType();
+        }
         return super.onKeyDown(keyCode, event);
     }
 
@@ -75,7 +76,7 @@ public class PlayActivity extends AppCompatActivity {
         return letterTyped.equalsIgnoreCase(letterToType);
     }
     private void rightInput() {
-        updateScore(LETTER_RIGHT);
+        updateScore(RIGHT_LETTER);
     }
     private void wrongInput() {
 
