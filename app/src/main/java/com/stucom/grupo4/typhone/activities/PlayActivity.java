@@ -2,12 +2,10 @@ package com.stucom.grupo4.typhone.activities;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
-import android.text.InputType;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.TextView;
 
 import com.stucom.grupo4.typhone.R;
@@ -31,13 +29,20 @@ public class PlayActivity extends AppCompatActivity {
     private TextView txtScore;
     private int score;
 
+    // Game timer
+    private final int GAME_TIME_SECONDS = 60;
+    private CountDownTimer gameTimer;
+    private TextView txtGameTimer;
+
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
+        // Initialize UI elements
         txtWord = findViewById(R.id.txtWord);
         txtWord.setHorizontallyScrolling(true);
         txtScore = findViewById(R.id.txtScore);
+        txtGameTimer = findViewById(R.id.txtGameTimer);
 
         startGame();
     }
@@ -66,6 +71,24 @@ public class PlayActivity extends AppCompatActivity {
         // Reset game variables
         lastWord = "";
         setScore(0);
+
+        // Start game timer
+        txtGameTimer.setText(String.valueOf(GAME_TIME_SECONDS));
+        gameTimer = new CountDownTimer(GAME_TIME_SECONDS * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // Update game time left UI
+                int secsLeft = (int) millisUntilFinished / 1000;
+                txtGameTimer.setText(String.valueOf(secsLeft));
+            }
+
+            @Override
+            public void onFinish() {
+                // TO DO: Game Over
+                txtGameTimer.setText("Game Over");
+            }
+        }.start();
+
         // Get first word
         updateWordToType();
     }
