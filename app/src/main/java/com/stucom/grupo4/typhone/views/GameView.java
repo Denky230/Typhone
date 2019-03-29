@@ -23,12 +23,13 @@ public class GameView extends View {
 
         // Initialize graphics brush
         brush = new Paint();
-        brush.setColor(Color.RED);
-        brush.setStyle(Paint.Style.FILL_AND_STROKE);
+        brush.setStyle(Paint.Style.FILL);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-         canvas.drawPaint(brush);
+        // Draw Word Timer
+        brush.setColor(Color.RED);
+        canvas.drawPaint(brush);
     }
 }
