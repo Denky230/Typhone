@@ -25,7 +25,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.48000002"
-        tools:text="Word ToT ype" />
+        tools:text="Word To Type" />
 
     <TextView
         android:id="@+id/txtScore"
