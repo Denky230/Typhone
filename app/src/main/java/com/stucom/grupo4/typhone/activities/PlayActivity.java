@@ -22,7 +22,7 @@ public class PlayActivity extends AppCompatActivity {
     private TextView txtWord;
     private String[] wordColors;
     private String lastWord;
-    private int cursor;
+    private int cursor; // Current letter index
 
     // Score
     private final int RIGHT_LETTER = 10;
