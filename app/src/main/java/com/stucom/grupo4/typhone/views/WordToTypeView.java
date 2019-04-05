@@ -14,6 +14,9 @@ import android.view.View;
 
 import com.stucom.grupo4.typhone.WordListener;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
 public class WordToTypeView extends View
         implements WordListener {
 
@@ -34,6 +37,24 @@ public class WordToTypeView extends View
     public WordToTypeView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
+/*
+    public void readCSV(){
+        try {
+            InputStreamReader is = new InputStreamReader(getContext().getAssets().open("word_pool_default.csv"));
+
+            BufferedReader reader = new BufferedReader(is);
+            reader.readLine();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Log.d("dcp", line);
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+            Log.d("dcp", "no funciona gilipoyas");
+        }
+    }
+*/
     public WordToTypeView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
