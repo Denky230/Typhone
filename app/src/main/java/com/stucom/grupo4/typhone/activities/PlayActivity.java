@@ -1,16 +1,19 @@
 package com.stucom.grupo4.typhone.activities;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
 import android.view.KeyEvent;
 import android.widget.TextView;
 
 import com.stucom.grupo4.typhone.R;
+import com.stucom.grupo4.typhone.WordListener;
+import com.stucom.grupo4.typhone.views.WordToTypeView;
 
-public class PlayActivity extends AppCompatActivity {
+import java.util.Locale;
+
+public class PlayActivity extends AppCompatActivity
+        implements WordListener {
 
     /* TEST - Remove this when pulling from word pool */
     String[] wordPool = new String[]{
@@ -19,10 +22,8 @@ public class PlayActivity extends AppCompatActivity {
     /* ---------------- */
 
     // Word to type
-    private TextView txtWord;
-    private String[] wordColors;
+    private WordToTypeView wordView;
     private String lastWord;
-    private int cursor; // Current letter index
 
     // Score
     private final int RIGHT_LETTER = 10;
@@ -39,8 +40,8 @@ public class PlayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_play);
 
         // Initialize UI elements
-        txtWord = findViewById(R.id.txtWord);
-        txtWord.setHorizontallyScrolling(true);
+        wordView = findViewById(R.id.wordToTypeView);
+        wordView.setWordListener(this);
         txtScore = findViewById(R.id.txtScore);
         txtGameTimer = findViewById(R.id.txtGameTimer);
 
@@ -51,19 +52,9 @@ public class PlayActivity extends AppCompatActivity {
         String key = KeyEvent.keyCodeToString(keyCode);
         char letterTyped = key.substring(key.length() - 1).charAt(0);
 
-        // Validate input letter
-        boolean right = isInputRight(letterTyped);
-        // Take actions based on result
-        if (right) rightInput();
-        else wrongInput();
-        // Update letter color based on result
-        updateLetterStyle(right);
+        // Pass character input to WordView
+        wordView.validateInput(letterTyped);
 
-        cursor++;
-        // Word completed = go next word
-        if (cursor == txtWord.length()) {
-            updateWordToType();
-        }
         return super.onKeyDown(keyCode, event);
     }
 
@@ -93,16 +84,14 @@ public class PlayActivity extends AppCompatActivity {
         updateWordToType();
     }
 
-    private boolean isInputRight(char letterInput) {
-        String letterToType = String.valueOf(txtWord.getText().charAt(cursor));
-        String letterTyped = String.valueOf(letterInput);
-        return letterTyped.equalsIgnoreCase(letterToType);
-    }
-    private void rightInput() {
+    @Override public void rightInput() {
         updateScore(RIGHT_LETTER);
     }
-    private void wrongInput() {
+    @Override public void wrongInput() {
 
+    }
+    @Override public void wordCompleted() {
+        updateWordToType();
     }
 
     /**
@@ -124,39 +113,7 @@ public class PlayActivity extends AppCompatActivity {
 
     private void updateWordToType() {
         String newWord = pullWordFromWordPool();
-        txtWord.setText(newWord);
-        initWordStyle(newWord);
-        updateWordStyle();
-        cursor = 0;
-    }
-    private void initWordStyle(String word) {
-        // Init style array with capacity = word.length
-        wordColors = new String[word.length()];
-        // Fill style array with color for each letter
-        for (int i = 0; i < wordColors.length; i++) {
-            wordColors[i] = "black";
-        }
-    }
-    private void updateLetterStyle(boolean isInputRight) {
-        // Determine current letter color
-        String color = isInputRight ? "green" : "red";
-        // Update current letter style
-        wordColors[cursor] = color;
-        // Re-draw word with updated style
-        updateWordStyle();
-    }
-    private void updateWordStyle() {
-        // Build styled word string
-        StringBuilder style = new StringBuilder();
-        char[] letters = txtWord.getText().toString().toCharArray();
-        for (int i = 0; i < letters.length; i++) {
-            style.append("<font color='").append(wordColors[i]).append("'>")
-                                        .append(letters[i]).append("</font>");
-        }
-        // Set textView to styled word string
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            txtWord.setText(Html.fromHtml(style.toString(),  Html.FROM_HTML_MODE_LEGACY), TextView.BufferType.SPANNABLE);
-        else txtWord.setText(Html.fromHtml(style.toString()), TextView.BufferType.SPANNABLE);
+        wordView.setWordToType(newWord);
     }
 
     private void updateScore(int scoreDiff) {
@@ -165,6 +122,7 @@ public class PlayActivity extends AppCompatActivity {
     private void setScore(int score) {
         // Update score + textView
         this.score = score;
-        txtScore.setText(String.valueOf(score));
+        String formatScore = String.format(Locale.getDefault(),"%06d" ,score);
+        txtScore.setText(formatScore);
     }
 }
