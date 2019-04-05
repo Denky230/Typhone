@@ -23,11 +23,13 @@ public class WordToTypeView extends View
     // Word to type
     private String word;
     private Rect wordBounds;
-    private int[] wordColors;
+    private int[] wordColors;   // Each letter's color id
     private int cursor = 0;     // Current letter index
+    private float x, y;
 
     // Style parameters
-    private final int LETTER_SPACING = 3;
+    private final int FONT_SIZE = 100;
+    private final int LETTER_SPACING = 0;
 
     private final TextPaint paint;
 
@@ -60,7 +62,7 @@ public class WordToTypeView extends View
 
         // Initialize text paints
         paint = new TextPaint();
-        paint.setTextSize(100);
+        paint.setTextSize(FONT_SIZE);
         paint.setAntiAlias(true);
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.FILL);
@@ -107,33 +109,38 @@ public class WordToTypeView extends View
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
-        // TEST - Draw background
-//        canvas.drawColor(Color.CYAN);
+
+        // Save word rect on wordBounds
+        paint.getTextBounds(word, 0, word.length(), wordBounds);
+
+        // Center word's Y
+        y = getMinimumHeight()
+                + (float) wordBounds.height() / 2 + (float) getHeight() / 2;
+
+        // Center word's X
+        float wordWidth = paint.measureText(word);
+        if (wordWidth < getWidth()) {
+            x = (getWidth() - wordWidth) / 2;
+        } else {
+            x = 0;
+        }
 
         // Draw letters
         char[] letters = word.toCharArray();
         for (int i = 0; i < letters.length; i++) {
 
-            // Get text measurements
-            paint.getTextBounds(word, i, i + 1, wordBounds);
-            float w = paint.measureText(String.valueOf(letters[i]));
-
-            // Set text Y position
-            float y = getMinimumHeight()    // Centered
-                    + (float) wordBounds.height() / 2
-                    + (float) getHeight() / 2;
-
-            // TEST - Draw text bounds
-//            Paint test = new Paint(paint);
-//            test.setColor(Color.MAGENTA);
-//            canvas.drawRect(0, y, w, wordBounds.bottom, test);
-
-
             // Draw text in corresponding color
             paint.setColor(wordColors[i]);
-            canvas.drawText(String.valueOf(letters[i]), 0, y, paint);
+            canvas.drawText(String.valueOf(letters[i]), x, y, paint);
 
+            // Get letter width
+            float w = paint.measureText(String.valueOf(letters[i]));
             // Move position to next letter
             canvas.translate(w + LETTER_SPACING, 0);
         }

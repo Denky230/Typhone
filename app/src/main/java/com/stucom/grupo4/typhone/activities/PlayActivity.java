@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.stucom.grupo4.typhone.R;
 import com.stucom.grupo4.typhone.WordListener;
+import com.stucom.grupo4.typhone.views.WordTimerView;
 import com.stucom.grupo4.typhone.views.WordToTypeView;
 
 import java.util.Locale;
@@ -25,6 +26,10 @@ public class PlayActivity extends AppCompatActivity
     private WordToTypeView wordView;
     private String lastWord;
 
+    // Word timer
+    private final int LETTER_TIME_MILISECONDS = 500;
+    private WordTimerView wordTimerView;
+
     // Score
     private final int RIGHT_LETTER = 10;
     private TextView txtScore;
@@ -40,6 +45,7 @@ public class PlayActivity extends AppCompatActivity
         setContentView(R.layout.activity_play);
 
         // Initialize UI elements
+        wordTimerView = findViewById(R.id.wordTimerView);
         wordView = findViewById(R.id.wordToTypeView);
         wordView.setWordListener(this);
         txtScore = findViewById(R.id.txtScore);
@@ -71,6 +77,9 @@ public class PlayActivity extends AppCompatActivity
                 // Update game time left UI
                 int secsLeft = (int) millisUntilFinished / 1000;
                 txtGameTimer.setText(String.valueOf(secsLeft));
+
+                // Update word timer left UI
+                wordTimerView.updateMsLeft();
             }
 
             @Override
@@ -112,8 +121,13 @@ public class PlayActivity extends AppCompatActivity
     }
 
     private void updateWordToType() {
+        // Get random new word
         String newWord = pullWordFromWordPool();
+        // Pass new word to WordView
         wordView.setWordToType(newWord);
+        // Pass time to type new word to WordTimerView
+        int newWordTotalMs = LETTER_TIME_MILISECONDS * newWord.length();
+        wordTimerView.setTotalMs(newWordTotalMs);
     }
 
     private void updateScore(int scoreDiff) {
