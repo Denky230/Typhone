@@ -15,7 +15,7 @@ import com.stucom.grupo4.typhone.views.WordToTypeView;
 import java.util.Locale;
 
 public class PlayActivity extends AppCompatActivity
-        implements WordListener {
+        implements WordListener, WordTimerView.WordTimerListener {
 
     /* TEST - Remove this when pulling from word pool */
     String[] wordPool = new String[]{
@@ -47,6 +47,7 @@ public class PlayActivity extends AppCompatActivity
 
         // Initialize UI elements
         wordTimerView = findViewById(R.id.wordTimerView);
+        wordTimerView.setWordTimerListener(this);
         wordView = findViewById(R.id.wordToTypeView);
         wordView.setWordListener(this);
         txtScore = findViewById(R.id.txtScore);
@@ -93,6 +94,7 @@ public class PlayActivity extends AppCompatActivity
         updateWordToType();
     }
 
+    // WordToType
     @Override public void rightInput() {
         updateScore(RIGHT_LETTER);
     }
@@ -100,6 +102,11 @@ public class PlayActivity extends AppCompatActivity
 
     }
     @Override public void wordCompleted() {
+        updateWordToType();
+    }
+
+    // WordTimer
+    @Override public void timesUp() {
         updateWordToType();
     }
 
@@ -123,8 +130,10 @@ public class PlayActivity extends AppCompatActivity
     private void updateWordToType() {
         // Get random new word
         String newWord = pullWordFromWordPool();
+
         // Pass new word to WordView
         wordView.setWordToType(newWord);
+
         // Pass time to type new word to WordTimerView
         int newWordTotalMs = LETTER_TIME_MILLISECONDS * newWord.length();
         wordTimerView.setTotalMs(newWordTotalMs);

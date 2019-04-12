@@ -53,27 +53,12 @@ public class WordToTypeView extends View
         wordBounds = new Rect();
     }
 
-    /*
-    public void readCSV(){
-        try {
-            InputStreamReader is = new InputStreamReader(getContext().getAssets().open("word_pool_default.csv"));
-
-            BufferedReader reader = new BufferedReader(is);
-            reader.readLine();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                Log.d("dcp", line);
-            }
-
-        }catch(Exception e){
-            e.printStackTrace();
-            Log.d("dcp", "no funciona gilipoyas");
-        }
-    }
-    */
-
     public void setWordToType(String word) {
+        // Set WordToType to new word
         this.word = word.toUpperCase();
+
+        // Reset cursor position
+        cursor = 0;
 
         // Set word letters to default color
         this.wordColors = new int[word.length()];
@@ -154,9 +139,6 @@ public class WordToTypeView extends View
         listener.wrongInput();
     }
     @Override public void wordCompleted() {
-        // Reset cursor position
-        cursor = 0;
-
         listener.wordCompleted();
     }
 
@@ -164,4 +146,23 @@ public class WordToTypeView extends View
     public void setWordListener(WordListener listener) {
         this.listener = listener;
     }
+
+    /*
+    public void readCSV(){
+        try {
+            InputStreamReader is = new InputStreamReader(getContext().getAssets().open("word_pool_default.csv"));
+
+            BufferedReader reader = new BufferedReader(is);
+            reader.readLine();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Log.d("dcp", line);
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+            Log.d("dcp", "no funciona gilipoyas");
+        }
+    }
+    */
 }

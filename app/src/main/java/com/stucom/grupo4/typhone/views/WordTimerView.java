@@ -35,12 +35,25 @@ public class WordTimerView extends View {
     }
     public void updateMsLeft() {
         this.invalidate();
-        msLeft -= 1000;
+
+        if (msLeft <= 0) {
+            listener.timesUp();
+        } else {
+            msLeft -= 1000;
+        }
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
+    @Override protected void onDraw(Canvas canvas) {
         canvas.scale((float) getWidth() / totalMs, 1);
         canvas.drawRect(0, 0, msLeft, getHeight(), paint);
+    }
+
+    public interface WordTimerListener {
+        void timesUp();
+    }
+
+    protected WordTimerListener listener;
+    public void setWordTimerListener(WordTimerListener listener) {
+        this.listener = listener;
     }
 }
