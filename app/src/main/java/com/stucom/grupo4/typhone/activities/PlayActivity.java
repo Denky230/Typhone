@@ -1,5 +1,6 @@
 package com.stucom.grupo4.typhone.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -27,7 +28,7 @@ public class PlayActivity extends AppCompatActivity
     private String lastWord;
 
     // Word timer
-    private final int LETTER_TIME_MILISECONDS = 500;
+    private final int LETTER_TIME_MILLISECONDS = 500;
     private WordTimerView wordTimerView;
 
     // Score
@@ -84,8 +85,7 @@ public class PlayActivity extends AppCompatActivity
 
             @Override
             public void onFinish() {
-                // TO DO: Game Over
-                txtGameTimer.setText("Game Over");
+                gameOver();
             }
         }.start();
 
@@ -126,7 +126,7 @@ public class PlayActivity extends AppCompatActivity
         // Pass new word to WordView
         wordView.setWordToType(newWord);
         // Pass time to type new word to WordTimerView
-        int newWordTotalMs = LETTER_TIME_MILISECONDS * newWord.length();
+        int newWordTotalMs = LETTER_TIME_MILLISECONDS * newWord.length();
         wordTimerView.setTotalMs(newWordTotalMs);
     }
 
@@ -138,5 +138,11 @@ public class PlayActivity extends AppCompatActivity
         this.score = score;
         String formatScore = String.format(Locale.getDefault(),"%06d" ,score);
         txtScore.setText(formatScore);
+    }
+
+    private void gameOver() {
+        // Send to StatsActivity
+        Intent intent = new Intent(PlayActivity.this, StatsActivity.class);
+        startActivity(intent);
     }
 }
