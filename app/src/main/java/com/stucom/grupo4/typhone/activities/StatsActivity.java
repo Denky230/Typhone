@@ -15,11 +15,21 @@ public class StatsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stats);
 
         // Replay button
-        findViewById(R.id.replay).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.btnReplay).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Send to PlayActivity (start new game)
                 Intent intent = new Intent(StatsActivity.this, PlayActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Home button
+        findViewById(R.id.btnHome).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Send to HomeActivity
+                Intent intent = new Intent(StatsActivity.this, HomeActivity.class);
                 startActivity(intent);
             }
         });

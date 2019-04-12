@@ -11,7 +11,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.stucom.grupo4.typhone.R;
-import com.stucom.grupo4.typhone.model.MyVolley;
+import com.stucom.grupo4.typhone.MyVolley;
 
 import java.util.HashMap;
 import java.util.Map;

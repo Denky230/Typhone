@@ -37,7 +37,7 @@ public class PlayActivity extends AppCompatActivity
     private int score;
 
     // Game timer
-    private final int GAME_TIME_SECONDS = 60;
+    private final int GAME_TIME_SECONDS = 10;
     private CountDownTimer gameTimer;
     private TextView txtGameTimer;
 

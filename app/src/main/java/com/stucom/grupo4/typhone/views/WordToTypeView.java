@@ -54,6 +54,9 @@ public class WordToTypeView extends View
     }
 
     public void setWordToType(String word) {
+        // Request redraw
+        this.invalidate();
+
         // Set WordToType to new word
         this.word = word.toUpperCase();
 

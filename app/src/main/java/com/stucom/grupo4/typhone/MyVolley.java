@@ -1,4 +1,4 @@
-package com.stucom.grupo4.typhone.model;
+package com.stucom.grupo4.typhone;
 
 import android.content.Context;
 
