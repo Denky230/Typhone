@@ -25,7 +25,6 @@ public class WordToTypeView extends View
     private Rect wordBounds;
     private int[] wordColors;   // Each letter's color id
     private int cursor = 0;     // Current letter index
-    private float x, y;
 
     // Style parameters
     private final int FONT_SIZE = 100;
@@ -39,7 +38,22 @@ public class WordToTypeView extends View
     public WordToTypeView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
-/*
+    public WordToTypeView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+
+        // Initialize text paints
+        paint = new TextPaint();
+        paint.setTextSize(FONT_SIZE);
+        paint.setAntiAlias(true);
+        paint.setColor(Color.BLACK);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setTypeface(Typeface.SANS_SERIF);
+
+        // Initialize word bounds
+        wordBounds = new Rect();
+    }
+
+    /*
     public void readCSV(){
         try {
             InputStreamReader is = new InputStreamReader(getContext().getAssets().open("word_pool_default.csv"));
@@ -56,21 +70,7 @@ public class WordToTypeView extends View
             Log.d("dcp", "no funciona gilipoyas");
         }
     }
-*/
-    public WordToTypeView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-
-        // Initialize text paints
-        paint = new TextPaint();
-        paint.setTextSize(FONT_SIZE);
-        paint.setAntiAlias(true);
-        paint.setColor(Color.BLACK);
-        paint.setStyle(Paint.Style.FILL);
-        paint.setTypeface(Typeface.SANS_SERIF);
-
-        // Initialize word bounds
-        wordBounds = new Rect();
-    }
+    */
 
     public void setWordToType(String word) {
         this.word = word.toUpperCase();
@@ -109,21 +109,16 @@ public class WordToTypeView extends View
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    }
-
-    @Override
     protected void onDraw(Canvas canvas) {
-
         // Save word rect on wordBounds
         paint.getTextBounds(word, 0, word.length(), wordBounds);
 
         // Center word's Y
-        y = getMinimumHeight()
+        float y = getMinimumHeight()
                 + (float) wordBounds.height() / 2 + (float) getHeight() / 2;
 
         // Center word's X
+        float x;
         float wordWidth = paint.measureText(word);
         if (wordWidth < getWidth()) {
             x = (getWidth() - wordWidth) / 2;
