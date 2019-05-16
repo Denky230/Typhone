@@ -8,14 +8,13 @@ import android.view.KeyEvent;
 import android.widget.TextView;
 
 import com.stucom.grupo4.typhone.R;
-import com.stucom.grupo4.typhone.WordListener;
 import com.stucom.grupo4.typhone.views.WordTimerView;
 import com.stucom.grupo4.typhone.views.WordToTypeView;
 
 import java.util.Locale;
 
 public class PlayActivity extends AppCompatActivity
-        implements WordListener, WordTimerView.WordTimerListener {
+        implements WordToTypeView.WordListener, WordTimerView.WordTimerListener {
 
     /* TEST - Remove this when pulling from word pool */
     String[] wordPool = new String[]{
@@ -25,20 +24,22 @@ public class PlayActivity extends AppCompatActivity
 
     // Word to type
     private WordToTypeView wordView;
+    private TextView nextWord;
     private String lastWord;
 
     // Word timer
-    private final int LETTER_TIME_MILLISECONDS = 500;
+    private final int LETTER_TIME_MILLISECONDS = 300;
     private WordTimerView wordTimerView;
 
     // Score
-    private final int RIGHT_LETTER = 10;
+    private final int RIGHT_INPUT = 10;
     private TextView txtScore;
     private int score;
 
     // Game timer
-    private final int GAME_TIME_SECONDS = 10;
-    private CountDownTimer gameTimer;
+    private final int GAME_TIME_SECONDS = 60;
+    private final int CLOCK_INTERVAL_MILLISECONDS = 10;
+    private int lastRemainingMillis;
     private TextView txtGameTimer;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +47,13 @@ public class PlayActivity extends AppCompatActivity
         setContentView(R.layout.activity_play);
 
         // Initialize UI elements
+        nextWord = findViewById(R.id.lblNextWord);
         wordTimerView = findViewById(R.id.wordTimerView);
         wordTimerView.setWordTimerListener(this);
         wordView = findViewById(R.id.wordToTypeView);
         wordView.setWordListener(this);
-        txtScore = findViewById(R.id.txtScore);
-        txtGameTimer = findViewById(R.id.txtGameTimer);
+        txtScore = findViewById(R.id.lblScore);
+        txtGameTimer = findViewById(R.id.lblGameTimer);
 
         startGame();
     }
@@ -72,16 +74,19 @@ public class PlayActivity extends AppCompatActivity
         setScore(0);
 
         // Start game timer
+        int gameTimeMillis = lastRemainingMillis = GAME_TIME_SECONDS * 1000;
         txtGameTimer.setText(String.valueOf(GAME_TIME_SECONDS));
-        gameTimer = new CountDownTimer(GAME_TIME_SECONDS * 1000, 1000) {
+        new CountDownTimer(gameTimeMillis, CLOCK_INTERVAL_MILLISECONDS) {
             @Override
             public void onTick(long millisUntilFinished) {
-                // Update game time left UI
+                // Update game time left
                 int secsLeft = (int) millisUntilFinished / 1000;
-                txtGameTimer.setText(String.valueOf(secsLeft));
+                setGameTime(secsLeft);
 
-                // Update word timer left UI
-                wordTimerView.updateMsLeft();
+                // Update word time left
+                int deltaRemainingMillis = lastRemainingMillis - (int) millisUntilFinished;
+                wordTimerView.updateMsLeft(deltaRemainingMillis);
+                lastRemainingMillis = (int) millisUntilFinished;
             }
 
             @Override
@@ -91,12 +96,13 @@ public class PlayActivity extends AppCompatActivity
         }.start();
 
         // Get first word
+        nextWord.setText(pullWordFromWordPool());
         updateWordToType();
     }
 
     // WordToType
     @Override public void rightInput() {
-        updateScore(RIGHT_LETTER);
+        updateScore(RIGHT_INPUT);
     }
     @Override public void wrongInput() {
 
@@ -124,19 +130,24 @@ public class PlayActivity extends AppCompatActivity
         
         // Save word pulled so the process can be repeated
         lastWord = randWord;
+
+//        randWord = "bienvayaparesequetodovabien";
         return randWord;
     }
 
     private void updateWordToType() {
+        // Get next word as current word
+        String currWord = nextWord.getText().toString();
+
+        // Pass current word to WordView
+        wordView.setWordToType(currWord);
+        // Pass time to type current word to WordTimerView
+        int currWordTotalMs = LETTER_TIME_MILLISECONDS * currWord.length();
+        wordTimerView.setTotalMs(currWordTotalMs);
+
         // Get random new word
         String newWord = pullWordFromWordPool();
-
-        // Pass new word to WordView
-        wordView.setWordToType(newWord);
-
-        // Pass time to type new word to WordTimerView
-        int newWordTotalMs = LETTER_TIME_MILLISECONDS * newWord.length();
-        wordTimerView.setTotalMs(newWordTotalMs);
+        nextWord.setText(newWord);
     }
 
     private void updateScore(int scoreDiff) {
@@ -145,13 +156,19 @@ public class PlayActivity extends AppCompatActivity
     private void setScore(int score) {
         // Update score + textView
         this.score = score;
-        String formatScore = String.format(Locale.getDefault(),"%06d" ,score);
+        String formatScore = String.format(Locale.getDefault(),"%06d", score);
         txtScore.setText(formatScore);
+    }
+
+    private void setGameTime(int seconds) {
+        int mins = seconds / 60;
+        int secs = seconds % 60;
+        txtGameTimer.setText(String.format(Locale.getDefault(),"%d:%02d", mins, secs));
     }
 
     private void gameOver() {
         // Send to StatsActivity
         Intent intent = new Intent(PlayActivity.this, StatsActivity.class);
-        startActivity(intent);
+//        startActivity(intent);
     }
 }

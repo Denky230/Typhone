@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 
 public class WordTimerView extends View {
@@ -33,13 +34,12 @@ public class WordTimerView extends View {
         this.invalidate();
         this.totalMs = this.msLeft = totalMs;
     }
-    public void updateMsLeft() {
-        this.invalidate();
-
+    public void updateMsLeft(int millis) {
+        this.postInvalidate();
         if (msLeft <= 0) {
             listener.timesUp();
         } else {
-            msLeft -= 1000;
+            msLeft -= millis;
         }
     }
 
@@ -51,7 +51,6 @@ public class WordTimerView extends View {
     public interface WordTimerListener {
         void timesUp();
     }
-
     protected WordTimerListener listener;
     public void setWordTimerListener(WordTimerListener listener) {
         this.listener = listener;

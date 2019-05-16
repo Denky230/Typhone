@@ -12,19 +12,14 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
-import com.stucom.grupo4.typhone.WordListener;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
-public class WordToTypeView extends View
-        implements WordListener {
+public class WordToTypeView extends View {
 
     // Word to type
     private String word;
     private Rect wordBounds;
     private int[] wordColors;   // Each letter's color id
     private int cursor = 0;     // Current letter index
+    private float x;
 
     // Style parameters
     private final int FONT_SIZE = 100;
@@ -78,16 +73,18 @@ public class WordToTypeView extends View
         boolean right = isInputRight(letterInput);
         // Take actions based on result
         if (right) {
-            rightInput();
+            wordColors[cursor] = Color.GREEN;
+            listener.rightInput();
         } else {
-            wrongInput();
+            wordColors[cursor] = Color.RED;
+            listener.wrongInput();
         }
 
         // Prepare to redraw next letter
         cursor++;
         // Check if word is completed
         if (cursor == word.length()) {
-            wordCompleted();
+            listener.wordCompleted();
         }
     }
     private boolean isInputRight(char letterInput) {
@@ -96,8 +93,7 @@ public class WordToTypeView extends View
         return letterTyped.equalsIgnoreCase(letterToType);
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
+    @Override protected void onDraw(Canvas canvas) {
         // Save word rect on wordBounds
         paint.getTextBounds(word, 0, word.length(), wordBounds);
 
@@ -106,18 +102,47 @@ public class WordToTypeView extends View
                 + (float) wordBounds.height() / 2 + (float) getHeight() / 2;
 
         // Center word's X
-        float x;
         float wordWidth = paint.measureText(word);
+        // Check if word fits in view
         if (wordWidth < getWidth()) {
             x = (getWidth() - wordWidth) / 2;
         } else {
-            x = 0;
+            // Update word's X so current letter is always on screen
+            float screenThreshold = (float) (getWidth() * 0.6);
+            float writtenLettersWidth = paint.measureText(word.substring(0, cursor));
+            float xOffset = screenThreshold - writtenLettersWidth;
+            float wordEnd = x + wordBounds.width();
+
+            // Check if writtenLettersWidth has reached screenThreshold
+            if (xOffset < 0) {
+                // Check if word goes out of screen
+                if (wordEnd > getWidth()) {
+                    x = xOffset;
+                }
+            } else {
+                x = 0;
+            }
+
+            /* TEST - Bars */
+//            // View
+//            paint.setColor(Color.CYAN);
+//            canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
+//            // Word
+//            paint.setColor(Color.GREEN);
+//            canvas.drawRect(x, y - wordBounds.height(), wordEnd, y, paint);
+//            // Written letters
+//            paint.setColor(Color.YELLOW);
+//            canvas.drawRect(x, y, writtenLettersWidth, getHeight(), paint);
+//            // Threshold
+//            paint.setColor(Color.MAGENTA);
+//            canvas.drawRect(screenThreshold ,0, screenThreshold + 5, getHeight(), paint);
+//
+//            paint.setColor(Color.BLACK);
         }
 
         // Draw letters
         char[] letters = word.toCharArray();
         for (int i = 0; i < letters.length; i++) {
-
             // Draw text in corresponding color
             paint.setColor(wordColors[i]);
             canvas.drawText(String.valueOf(letters[i]), x, y, paint);
@@ -129,22 +154,11 @@ public class WordToTypeView extends View
         }
     }
 
-    @Override public void rightInput() {
-        // Set current letter color
-        wordColors[cursor] = Color.GREEN;
-
-        listener.rightInput();
+    public interface WordListener {
+        void rightInput();
+        void wrongInput();
+        void wordCompleted();
     }
-    @Override public void wrongInput() {
-        // Set current letter color
-        wordColors[cursor] = Color.RED;
-
-        listener.wrongInput();
-    }
-    @Override public void wordCompleted() {
-        listener.wordCompleted();
-    }
-
     protected WordListener listener;
     public void setWordListener(WordListener listener) {
         this.listener = listener;

@@ -7,7 +7,7 @@
     tools:context=".activities.PlayActivity">
 
     <TextView
-        android:id="@+id/txtScore"
+        android:id="@+id/lblScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -18,13 +18,13 @@
         tools:text="Score" />
 
     <TextView
-        android:id="@+id/txtGameTimer"
+        android:id="@+id/lblGameTimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:textSize="42sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtScore"
+        app:layout_constraintTop_toBottomOf="@+id/lblScore"
         tools:text="Game timer" />
 
     <com.stucom.grupo4.typhone.views.WordTimerView
@@ -35,12 +35,12 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/wordToTypeView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.401" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <com.stucom.grupo4.typhone.views.WordToTypeView
         android:id="@+id/wordToTypeView"
@@ -55,4 +55,20 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lblNextWord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Next word"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toTopOf="@+id/wordTimerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>
