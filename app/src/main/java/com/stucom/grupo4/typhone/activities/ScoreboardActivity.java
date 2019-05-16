@@ -49,7 +49,33 @@ public class ScoreboardActivity extends AppCompatActivity {
                 new User("Jose", ""),
                 new User("Alejandro", ""),
                 new User("Manolo", ""),
-                new User("Carlos", "")
+                new User("Carlos", ""),
+                new User("Juan", ""),
+                new User("Peter", ""),
+                new User("Almondiga", ""),
+                new User("Alejandro", ""),
+                new User("Manolo", ""),
+                new User("Carlos", ""),
+                new User("Juan", ""),
+                new User("Peter", ""),
+                new User("Almondiga", ""),
+                new User("Jose", ""),
+                new User("Alejandro", ""),
+                new User("Manolo", ""),
+                new User("Carlos", ""),
+                new User("Juan", ""),
+                new User("Peter", ""),
+                new User("Almondiga", ""),
+                new User("Jose", ""),
+                new User("Alejandro", ""),
+                new User("Manolo", ""),
+                new User("Carlos", ""),
+                new User("Juan", ""),
+                new User("Peter", ""),
+                new User("Almondiga", ""),
+                new User("Jose", ""),
+                new User("Alejandro", ""),
+                new User("Manolo", "")
         );
 
         // Set UsersAdapter with Users ranking to recyclerView
@@ -61,13 +87,13 @@ public class ScoreboardActivity extends AppCompatActivity {
 
         final TextView rank;
         final TextView name;
-        final ImageView imageView;
+        final TextView score;
 
         UserViewHolder(View itemView) {
             super(itemView);
             rank = itemView.findViewById(R.id.lblRank);
+            score = itemView.findViewById(R.id.lblScore);
             name = itemView.findViewById(R.id.lblUsername);
-            imageView = itemView.findViewById(R.id.imageView);
         }
     }
     class UsersAdapter extends RecyclerView.Adapter<UserViewHolder> {
@@ -89,8 +115,10 @@ public class ScoreboardActivity extends AppCompatActivity {
             User user = users.get(position);
 
             // Set User values in ranking layout
-            viewHolder.rank.setText(position);
+            viewHolder.rank.setText(String.valueOf(position + 1));
             viewHolder.name.setText(user.getName());
+            int offset = 1548 * position;
+            viewHolder.score.setText(String.valueOf(184510 - offset));
 //            Picasso.get().load(user.getImage()).into(viewHolder.imageView);
 
             // Define OnClick() for whole ranking layout

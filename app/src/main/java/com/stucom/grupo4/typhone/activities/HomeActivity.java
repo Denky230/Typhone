@@ -23,5 +23,15 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // Score button
+        findViewById(R.id.btnScore).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Send to PlayActivity (start new game)
+                Intent intent = new Intent(HomeActivity.this, ScoreboardActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

@@ -18,7 +18,8 @@ public class PlayActivity extends AppCompatActivity
 
     /* TEST - Remove this when pulling from word pool */
     String[] wordPool = new String[]{
-            "helicopterus", "holabondia", "whatisthis", "sunormal"
+            "helicopter", "supermarket", "kitchen", "failure", "computer",
+            "trousers", "mouse", "monday", "teacher", "beautiful"
     };
     /* ---------------- */
 
