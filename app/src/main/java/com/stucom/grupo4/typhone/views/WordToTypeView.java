@@ -101,10 +101,11 @@ public class WordToTypeView extends View {
         float y = getMinimumHeight()
                 + (float) wordBounds.height() / 2 + (float) getHeight() / 2;
 
-        // Center word's X
-        float wordWidth = paint.measureText(word);
+        // Figure out word's X
         // Check if word fits in view
+        float wordWidth = paint.measureText(word);
         if (wordWidth < getWidth()) {
+            // Center word's X
             x = (getWidth() - wordWidth) / 2;
         } else {
             // Update word's X so current letter is always on screen
