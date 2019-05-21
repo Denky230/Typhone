@@ -43,6 +43,8 @@ public class PlayActivity extends AppCompatActivity
     private int lastRemainingMillis;
     private TextView txtGameTimer;
 
+    private boolean wordCompleted;
+
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
@@ -59,12 +61,14 @@ public class PlayActivity extends AppCompatActivity
         startGame();
     }
     @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // Get user input letter
-        String key = KeyEvent.keyCodeToString(keyCode);
-        char letterTyped = key.substring(key.length() - 1).charAt(0);
+        if (!wordCompleted) {
+            // Get user input letter
+            String key = KeyEvent.keyCodeToString(keyCode);
+            char letterTyped = key.substring(key.length() - 1).charAt(0);
 
-        // Pass character input to WordView
-        wordView.validateInput(letterTyped);
+            // Pass character input to WordView
+            wordView.validateInput(letterTyped);
+        }
 
         return super.onKeyDown(keyCode, event);
     }
@@ -73,6 +77,7 @@ public class PlayActivity extends AppCompatActivity
         // Reset game variables
         lastWord = "";
         setScore(0);
+        wordCompleted = false;
 
         // Start game timer
         int gameTimeMillis = lastRemainingMillis = GAME_TIME_SECONDS * 1000;
@@ -85,9 +90,11 @@ public class PlayActivity extends AppCompatActivity
                 setGameTime(secsLeft);
 
                 // Update word time left
-                int deltaRemainingMillis = lastRemainingMillis - (int) millisUntilFinished;
-                wordTimerView.updateMsLeft(deltaRemainingMillis);
-                lastRemainingMillis = (int) millisUntilFinished;
+                if (!wordCompleted) {
+                    int deltaRemainingMillis = lastRemainingMillis - (int) millisUntilFinished;
+                    wordTimerView.updateMsLeft(deltaRemainingMillis);
+                    lastRemainingMillis = (int) millisUntilFinished;
+                }
             }
 
             @Override
@@ -109,7 +116,21 @@ public class PlayActivity extends AppCompatActivity
 
     }
     @Override public void wordCompleted() {
-        updateWordToType();
+        wordCompleted = true;
+
+        // Wait a bit before showing next word
+        int delayMs = 150;
+        new CountDownTimer(delayMs, delayMs) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+            @Override
+            public void onFinish() {
+                wordCompleted = false;
+                updateWordToType();
+            }
+        }.start();
     }
 
     // WordTimer
@@ -132,7 +153,6 @@ public class PlayActivity extends AppCompatActivity
         // Save word pulled so the process can be repeated
         lastWord = randWord;
 
-//        randWord = "bienvayaparesequetodovabien";
         return randWord;
     }
 
