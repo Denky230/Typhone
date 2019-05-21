@@ -101,10 +101,11 @@ public class WordToTypeView extends View {
         float y = getMinimumHeight()
                 + (float) wordBounds.height() / 2 + (float) getHeight() / 2;
 
-        // Center word's X
-        float wordWidth = paint.measureText(word);
+        // Figure out word's X
         // Check if word fits in view
+        float wordWidth = paint.measureText(word);
         if (wordWidth < getWidth()) {
+            // Center word's X
             x = (getWidth() - wordWidth) / 2;
         } else {
             // Update word's X so current letter is always on screen
@@ -123,12 +124,12 @@ public class WordToTypeView extends View {
                 x = 0;
             }
 
-            /* TEST - Bars */
-//            // View
+            // region TEST - Bars
+            // View
 //            paint.setColor(Color.CYAN);
 //            canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
 //            // Word
-//            paint.setColor(Color.GREEN);
+//            paint.setColor(Color.LTGRAY);
 //            canvas.drawRect(x, y - wordBounds.height(), wordEnd, y, paint);
 //            // Written letters
 //            paint.setColor(Color.YELLOW);
@@ -138,6 +139,7 @@ public class WordToTypeView extends View {
 //            canvas.drawRect(screenThreshold ,0, screenThreshold + 5, getHeight(), paint);
 //
 //            paint.setColor(Color.BLACK);
+            // endregion
         }
 
         // Draw letters
@@ -163,23 +165,4 @@ public class WordToTypeView extends View {
     public void setWordListener(WordListener listener) {
         this.listener = listener;
     }
-
-    /*
-    public void readCSV(){
-        try {
-            InputStreamReader is = new InputStreamReader(getContext().getAssets().open("word_pool_default.csv"));
-
-            BufferedReader reader = new BufferedReader(is);
-            reader.readLine();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                Log.d("dcp", line);
-            }
-
-        }catch(Exception e){
-            e.printStackTrace();
-            Log.d("dcp", "no funciona gilipoyas");
-        }
-    }
-    */
 }

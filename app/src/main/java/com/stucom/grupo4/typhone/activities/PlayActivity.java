@@ -8,9 +8,13 @@ import android.view.KeyEvent;
 import android.widget.TextView;
 
 import com.stucom.grupo4.typhone.R;
+import com.stucom.grupo4.typhone.model.modifiers.Modifier;
+import com.stucom.grupo4.typhone.model.modifiers.SpeedUp;
 import com.stucom.grupo4.typhone.views.WordTimerView;
 import com.stucom.grupo4.typhone.views.WordToTypeView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class PlayActivity extends AppCompatActivity
@@ -23,25 +27,37 @@ public class PlayActivity extends AppCompatActivity
     };
     /* ---------------- */
 
-    // Word to type
-    private WordToTypeView wordView;
-    private TextView nextWord;
-    private String lastWord;
-
-    // Word timer
-    private final int LETTER_TIME_MILLISECONDS = 300;
-    private WordTimerView wordTimerView;
+    // Game timer
+    private final int GAME_TIME_SECONDS = 60;
+    private final int CLOCK_INTERVAL_MILLISECONDS = 10;
+    private int lastRemainingMillis;
+    private TextView txtGameTimer;
 
     // Score
     private final int RIGHT_INPUT = 10;
     private TextView txtScore;
     private int score;
 
-    // Game timer
-    private final int GAME_TIME_SECONDS = 60;
-    private final int CLOCK_INTERVAL_MILLISECONDS = 10;
-    private int lastRemainingMillis;
-    private TextView txtGameTimer;
+    // Game modifiers
+    private final Modifier[] modifiers = new Modifier[] {
+            new SpeedUp()
+    };
+    private final List<Modifier> activeModifiers = new ArrayList<Modifier>();
+    private final int MODIFIER_DURATION_SECONDS = 5;
+    private final int MODIFIER_DOWNTIME_SECONDS = 5;
+    private final int MODIFIER_EVENT_SECONDS = 5;
+
+    // Word timer
+    private final int LETTER_TIME_MILLISECONDS = 300;
+    private WordTimerView wordTimerView;
+
+    // Word to type
+    private WordToTypeView wordView;
+    private TextView nextWord;
+    private String lastWord;
+
+    // When a word is completed, briefly block game
+    private boolean wordCompleted;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,20 +75,23 @@ public class PlayActivity extends AppCompatActivity
         startGame();
     }
     @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
-        // Get user input letter
-        String key = KeyEvent.keyCodeToString(keyCode);
-        char letterTyped = key.substring(key.length() - 1).charAt(0);
+        if (!wordCompleted) {
+            // Get user input letter
+            String key = KeyEvent.keyCodeToString(keyCode);
+            char letterTyped = key.substring(key.length() - 1).charAt(0);
 
-        // Pass character input to WordView
-        wordView.validateInput(letterTyped);
+            // Pass character input to WordView
+            wordView.validateInput(letterTyped);
+        }
 
         return super.onKeyDown(keyCode, event);
     }
 
     private void startGame() {
         // Reset game variables
-        lastWord = "";
         setScore(0);
+        lastWord = "";
+        wordCompleted = false;
 
         // Start game timer
         int gameTimeMillis = lastRemainingMillis = GAME_TIME_SECONDS * 1000;
@@ -85,9 +104,11 @@ public class PlayActivity extends AppCompatActivity
                 setGameTime(secsLeft);
 
                 // Update word time left
-                int deltaRemainingMillis = lastRemainingMillis - (int) millisUntilFinished;
-                wordTimerView.updateMsLeft(deltaRemainingMillis);
-                lastRemainingMillis = (int) millisUntilFinished;
+                if (!wordCompleted) {
+                    int deltaRemainingMillis = lastRemainingMillis - (int) millisUntilFinished;
+                    wordTimerView.updateMsLeft(deltaRemainingMillis);
+                    lastRemainingMillis = (int) millisUntilFinished;
+                }
             }
 
             @Override
@@ -109,12 +130,26 @@ public class PlayActivity extends AppCompatActivity
 
     }
     @Override public void wordCompleted() {
-        updateWordToType();
+        wordCompleted = true;
+
+        // Wait a bit before showing next word
+        int delayMs = 250;
+        new CountDownTimer(delayMs, delayMs) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+            @Override
+            public void onFinish() {
+                wordCompleted = false;
+                updateWordToType();
+            }
+        }.start();
     }
 
     // WordTimer
     @Override public void timesUp() {
-        updateWordToType();
+        wordCompleted();
     }
 
     /**
@@ -132,7 +167,6 @@ public class PlayActivity extends AppCompatActivity
         // Save word pulled so the process can be repeated
         lastWord = randWord;
 
-//        randWord = "bienvayaparesequetodovabien";
         return randWord;
     }
 
