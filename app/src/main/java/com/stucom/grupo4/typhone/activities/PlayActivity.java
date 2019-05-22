@@ -5,17 +5,23 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.TextView;
 
 import com.stucom.grupo4.typhone.R;
 import com.stucom.grupo4.typhone.model.modifiers.Modifier;
-import com.stucom.grupo4.typhone.model.modifiers.SpeedUp;
+import com.stucom.grupo4.typhone.model.modifiers.Test_01;
+import com.stucom.grupo4.typhone.model.modifiers.Test_02;
+import com.stucom.grupo4.typhone.model.modifiers.Test_03;
+import com.stucom.grupo4.typhone.tools.Tools;
 import com.stucom.grupo4.typhone.views.WordTimerView;
 import com.stucom.grupo4.typhone.views.WordToTypeView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import static com.stucom.grupo4.typhone.control.GameController.*;
 
 public class PlayActivity extends AppCompatActivity
         implements WordToTypeView.WordListener, WordTimerView.WordTimerListener {
@@ -40,15 +46,11 @@ public class PlayActivity extends AppCompatActivity
 
     // Game modifiers
     private final Modifier[] modifiers = new Modifier[] {
-            new SpeedUp()
+            new Test_01(), new Test_02(), new Test_03()
     };
-    private final List<Modifier> activeModifiers = new ArrayList<Modifier>();
-    private final int MODIFIER_DURATION_SECONDS = 5;
-    private final int MODIFIER_DOWNTIME_SECONDS = 5;
-    private final int MODIFIER_EVENT_SECONDS = 5;
+    private final List<Modifier> activeModifiers = new ArrayList<>();
 
     // Word timer
-    private final int LETTER_TIME_MILLISECONDS = 300;
     private WordTimerView wordTimerView;
 
     // Word to type
@@ -71,6 +73,25 @@ public class PlayActivity extends AppCompatActivity
         wordView.setWordListener(this);
         txtScore = findViewById(R.id.lblScore);
         txtGameTimer = findViewById(R.id.lblGameTimer);
+
+        final View decorView = getWindow().getDecorView();
+        final int uiOptions =
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                        View.SYSTEM_UI_FLAG_FULLSCREEN |
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                Tools.log(String.valueOf(visibility));
+                decorView.setSystemUiVisibility(uiOptions);
+            }
+        });
+
 
         startGame();
     }
@@ -120,6 +141,11 @@ public class PlayActivity extends AppCompatActivity
         // Get first word
         nextWord.setText(pullWordFromWordPool());
         updateWordToType();
+    }
+
+    // Game modifiers
+    private void startModifierEvent(Modifier modifier) {
+
     }
 
     // WordToType
