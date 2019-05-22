@@ -10,6 +10,10 @@ import android.widget.TextView;
 import com.stucom.grupo4.typhone.R;
 import com.stucom.grupo4.typhone.model.modifiers.Modifier;
 import com.stucom.grupo4.typhone.model.modifiers.SpeedUp;
+import com.stucom.grupo4.typhone.model.modifiers.Test_01;
+import com.stucom.grupo4.typhone.model.modifiers.Test_02;
+import com.stucom.grupo4.typhone.model.modifiers.Test_03;
+import com.stucom.grupo4.typhone.tools.Tools;
 import com.stucom.grupo4.typhone.views.WordTimerView;
 import com.stucom.grupo4.typhone.views.WordToTypeView;
 
@@ -40,9 +44,9 @@ public class PlayActivity extends AppCompatActivity
 
     // Game modifiers
     private final Modifier[] modifiers = new Modifier[] {
-            new SpeedUp()
+            new Test_01(), new Test_02(), new Test_03()
     };
-    private final List<Modifier> activeModifiers = new ArrayList<Modifier>();
+    private final List<Modifier> activeModifiers = new ArrayList<>();
     private final int MODIFIER_DURATION_SECONDS = 5;
     private final int MODIFIER_DOWNTIME_SECONDS = 5;
     private final int MODIFIER_EVENT_SECONDS = 5;
@@ -79,6 +83,8 @@ public class PlayActivity extends AppCompatActivity
             // Get user input letter
             String key = KeyEvent.keyCodeToString(keyCode);
             char letterTyped = key.substring(key.length() - 1).charAt(0);
+
+            Tools.toast(getApplicationContext(), key);
 
             // Pass character input to WordView
             wordView.validateInput(letterTyped);
@@ -120,6 +126,11 @@ public class PlayActivity extends AppCompatActivity
         // Get first word
         nextWord.setText(pullWordFromWordPool());
         updateWordToType();
+    }
+
+    // Game modifiers
+    private void startModifierEvent(Modifier modifier) {
+
     }
 
     // WordToType
