@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".activities.HomeActivity"
-            android:screenOrientation="portrait">
+            android:theme="@style/AppTheme.FullscreenPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -21,7 +21,7 @@
 
         <activity
             android:name=".activities.PlayActivity"
-            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.FullscreenPortrait"
             android:windowSoftInputMode="stateAlwaysVisible|adjustNothing"
             android:inputType="textNoSuggestions|textFilter|textVisiblePassword">
         </activity>
