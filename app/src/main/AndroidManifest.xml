@@ -22,7 +22,8 @@
         <activity
             android:name=".activities.PlayActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysVisible|adjustNothing">
+            android:windowSoftInputMode="stateAlwaysVisible|adjustNothing"
+            android:inputType="textNoSuggestions|textFilter|textVisiblePassword">
         </activity>
 
         <activity android:name=".activities.StatsActivity"

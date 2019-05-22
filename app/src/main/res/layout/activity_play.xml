@@ -66,4 +66,5 @@
         app:layout_constraintBottom_toTopOf="@+id/wordTimerView"
         app:layout_constraintEnd_toEndOf="@+id/wordToTypeView"
         app:layout_constraintStart_toStartOf="@+id/wordToTypeView" />
+
 </android.support.constraint.ConstraintLayout>
