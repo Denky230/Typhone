@@ -11,17 +11,8 @@ import com.stucom.grupo4.typhone.R;
 
 public class HomeActivity extends AppCompatActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //updateUI();
-        setupMainWindowDisplayMode();
-
-        // No title, no nav bar
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         setContentView(R.layout.activity_home);
 
         // Play button
@@ -45,45 +36,18 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-  //      updateUI();
-        setupMainWindowDisplayMode();
-    }
-/*
-    public void updateUI() {
-        final View decorView = getWindow().getDecorView();
-        decorView.setOnSystemUiVisibilityChangeListener (new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                    decorView.setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-                }
-            }
-        });
-    }*/
-
     private void setupMainWindowDisplayMode() {
-        View decorView = setSystemUiVisilityMode();
+        View decorView = setSystemUIVisibilityMode();
         decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
             @Override
             public void onSystemUiVisibilityChange(int visibility) {
-                setSystemUiVisilityMode(); // Needed to avoid exiting immersive_sticky when keyboard is displayed
+                setSystemUIVisibilityMode(); // Needed to avoid exiting immersive_sticky when keyboard is displayed
             }
         });
     }
-
-    private View setSystemUiVisilityMode() {
+    private View setSystemUIVisibilityMode() {
         View decorView = getWindow().getDecorView();
-        int options;
-        options =
+        int options =
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN

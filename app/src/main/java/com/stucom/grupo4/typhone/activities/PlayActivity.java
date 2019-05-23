@@ -8,18 +8,19 @@ import android.view.KeyEvent;
 import android.widget.TextView;
 
 import com.stucom.grupo4.typhone.R;
+import com.stucom.grupo4.typhone.control.GameController;
 import com.stucom.grupo4.typhone.model.modifiers.Modifier;
+import com.stucom.grupo4.typhone.model.modifiers.SpeedUp;
 import com.stucom.grupo4.typhone.model.modifiers.Test_01;
 import com.stucom.grupo4.typhone.model.modifiers.Test_02;
 import com.stucom.grupo4.typhone.model.modifiers.Test_03;
+import com.stucom.grupo4.typhone.tools.Tools;
 import com.stucom.grupo4.typhone.views.WordTimerView;
 import com.stucom.grupo4.typhone.views.WordToTypeView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import static com.stucom.grupo4.typhone.control.GameController.*;
 
 public class PlayActivity extends AppCompatActivity
         implements WordToTypeView.WordListener, WordTimerView.WordTimerListener {
@@ -43,9 +44,6 @@ public class PlayActivity extends AppCompatActivity
     private int score;
 
     // Game modifiers
-    private final Modifier[] modifiers = new Modifier[] {
-            new Test_01(), new Test_02(), new Test_03()
-    };
     private final List<Modifier> activeModifiers = new ArrayList<>();
 
     // Word timer
@@ -97,6 +95,10 @@ public class PlayActivity extends AppCompatActivity
             // Get user input letter
             String key = KeyEvent.keyCodeToString(keyCode);
             char letterTyped = key.substring(key.length() - 1).charAt(0);
+
+            if (keyCode == KeyEvent.KEYCODE_SPACE) {
+                new SpeedUp().activate();
+            }
 
             // Pass character input to WordView
             wordView.validateInput(letterTyped);
@@ -200,7 +202,7 @@ public class PlayActivity extends AppCompatActivity
         // Pass current word to WordView
         wordView.setWordToType(currWord);
         // Pass time to type current word to WordTimerView
-        int currWordTotalMs = LETTER_TIME_MILLISECONDS * currWord.length();
+        int currWordTotalMs = GameController.LETTER_TIME_MILLISECONDS * currWord.length();
         wordTimerView.setTotalMs(currWordTotalMs);
 
         // Get random new word

@@ -7,7 +7,7 @@ import android.widget.Toast;
 public class Tools {
 
     public static void log(String message) {
-        Log.d("dky", message);
+        Log.d("tydebug", message);
     }
 
     public static void toast(Context context, String message) {
