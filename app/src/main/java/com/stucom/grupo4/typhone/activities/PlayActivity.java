@@ -70,24 +70,6 @@ public class PlayActivity extends AppCompatActivity
         txtScore = findViewById(R.id.lblScore);
         txtGameTimer = findViewById(R.id.lblGameTimer);
 
-//        final View decorView = getWindow().getDecorView();
-//        final int uiOptions =
-//                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-//                        View.SYSTEM_UI_FLAG_FULLSCREEN |
-//                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-//                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-//                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-//        decorView.setSystemUiVisibility(uiOptions);
-//
-//        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-//            @Override
-//            public void onSystemUiVisibilityChange(int visibility) {
-//                Tools.log(String.valueOf(visibility));
-//                decorView.setSystemUiVisibility(uiOptions);
-//            }
-//        });
-
-
         startGame();
     }
     @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -116,35 +98,68 @@ public class PlayActivity extends AppCompatActivity
         // Start game timer
         int gameTimeMillis = lastRemainingMillis = GAME_TIME_SECONDS * 1000;
         txtGameTimer.setText(String.valueOf(GAME_TIME_SECONDS));
-        new CountDownTimer(gameTimeMillis, CLOCK_INTERVAL_MILLISECONDS) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                // Update game time left
-                int secsLeft = (int) millisUntilFinished / 1000;
-                setGameTime(secsLeft);
-
-                // Update word time left
-                if (!wordCompleted) {
-                    int deltaRemainingMillis = lastRemainingMillis - (int) millisUntilFinished;
-                    wordTimerView.updateMsLeft(deltaRemainingMillis);
-                    lastRemainingMillis = (int) millisUntilFinished;
-                }
-            }
-
-            @Override
-            public void onFinish() {
-                gameOver();
-            }
-        }.start();
+//        new CountDownTimer(gameTimeMillis, CLOCK_INTERVAL_MILLISECONDS) {
+//            @Override
+//            public void onTick(long millisUntilFinished) {
+//                // Update game time left
+//                int secsLeft = (int) millisUntilFinished / 1000;
+//                setGameTime(secsLeft);
+//
+//                // Update word time left
+//                if (!wordCompleted) {
+//                    int deltaRemainingMillis = lastRemainingMillis - (int) millisUntilFinished;
+//                    wordTimerView.updateMsLeft(deltaRemainingMillis);
+//                    lastRemainingMillis = (int) millisUntilFinished;
+//                }
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                gameOver();
+//            }
+//        }.start();
 
         // Get first word
         nextWord.setText(pullWordFromWordPool());
         updateWordToType();
     }
+    private void gameOver() {
+        // Send to StatsActivity
+        Intent intent = new Intent(PlayActivity.this, StatsActivity.class);
+//        startActivity(intent);
+    }
 
-    // Game modifiers
-    private void startModifierEvent(Modifier modifier) {
+    /**
+     * Pull non-repeated random word from wordPool.
+     * @return random non-repeated word from wordPool
+     */
+    private String pullWordFromWordPool() {
+        // Keep pulling til non-repeated word comes out
+        String randWord;
+        do {
+            int randIndex = (int) (Math.random() * wordPool.length);
+            randWord = wordPool[randIndex];
+        } while (randWord.equals(lastWord));
 
+        // Save word pulled so the process can be repeated
+        lastWord = randWord;
+
+        return randWord;
+    }
+    private void updateWordToType() {
+        // Get next word as current word
+        String currWord = nextWord.getText().toString();
+
+        // Pass current word to WordView
+        wordView.setWordToType(currWord);
+
+        // Pass time to type current word to WordTimerView
+        int currWordTotalMs = GameController.LETTER_TIME_MILLISECONDS * currWord.length();
+        wordTimerView.setTotalMs(currWordTotalMs);
+
+        // Get random new word
+        String newWord = pullWordFromWordPool();
+        nextWord.setText(newWord);
     }
 
     // WordToType
@@ -177,39 +192,6 @@ public class PlayActivity extends AppCompatActivity
         wordCompleted();
     }
 
-    /**
-     * Pull non-repeated random word from wordPool.
-     * @return random non-repeated word from wordPool
-     */
-    private String pullWordFromWordPool() {
-        // Keep pulling til non-repeated word comes out
-        String randWord;
-        do {
-            int randIndex = (int) (Math.random() * wordPool.length);
-            randWord = wordPool[randIndex];
-        } while (randWord.equals(lastWord));
-        
-        // Save word pulled so the process can be repeated
-        lastWord = randWord;
-
-        return randWord;
-    }
-
-    private void updateWordToType() {
-        // Get next word as current word
-        String currWord = nextWord.getText().toString();
-
-        // Pass current word to WordView
-        wordView.setWordToType(currWord);
-        // Pass time to type current word to WordTimerView
-        int currWordTotalMs = GameController.LETTER_TIME_MILLISECONDS * currWord.length();
-        wordTimerView.setTotalMs(currWordTotalMs);
-
-        // Get random new word
-        String newWord = pullWordFromWordPool();
-        nextWord.setText(newWord);
-    }
-
     private void updateScore(int scoreDiff) {
         setScore(this.score + scoreDiff);
     }
@@ -224,11 +206,5 @@ public class PlayActivity extends AppCompatActivity
         int mins = seconds / 60;
         int secs = seconds % 60;
         txtGameTimer.setText(String.format(Locale.getDefault(),"%d:%02d", mins, secs));
-    }
-
-    private void gameOver() {
-        // Send to StatsActivity
-        Intent intent = new Intent(PlayActivity.this, StatsActivity.class);
-//        startActivity(intent);
     }
 }
