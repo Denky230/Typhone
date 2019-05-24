@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.widget.TextView;
 
 import com.stucom.grupo4.typhone.R;
+import com.stucom.grupo4.typhone.control.AudioController;
 import com.stucom.grupo4.typhone.control.GameController;
 import com.stucom.grupo4.typhone.model.modifiers.Modifier;
 import com.stucom.grupo4.typhone.model.modifiers.SpeedUp;
@@ -32,8 +33,11 @@ public class PlayActivity extends AppCompatActivity
     };
     /* ---------------- */
 
+    // Audio
+    private AudioController audio;
+
     // Game timer
-    private final int GAME_TIME_SECONDS = 60;
+    private final int GAME_TIME_SECONDS = 20;
     private final int CLOCK_INTERVAL_MILLISECONDS = 10;
     private int lastRemainingMillis;
     private TextView txtGameTimer;
@@ -61,6 +65,10 @@ public class PlayActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
+        // Start Gameplay music
+        audio = AudioController.getInstance();
+        audio.playMusic(this, R.raw.space_trip);
+
         // Initialize UI elements
         nextWord = findViewById(R.id.lblNextWord);
         wordTimerView = findViewById(R.id.wordTimerView);
@@ -71,6 +79,14 @@ public class PlayActivity extends AppCompatActivity
         txtGameTimer = findViewById(R.id.lblGameTimer);
 
         startGame();
+    }
+    @Override protected void onResume() {
+        super.onResume();
+        audio.startMusic();
+    }
+    @Override protected void onPause() {
+        audio.pauseMusic();
+        super.onPause();
     }
     @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (!wordCompleted) {
@@ -98,26 +114,26 @@ public class PlayActivity extends AppCompatActivity
         // Start game timer
         int gameTimeMillis = lastRemainingMillis = GAME_TIME_SECONDS * 1000;
         txtGameTimer.setText(String.valueOf(GAME_TIME_SECONDS));
-//        new CountDownTimer(gameTimeMillis, CLOCK_INTERVAL_MILLISECONDS) {
-//            @Override
-//            public void onTick(long millisUntilFinished) {
-//                // Update game time left
-//                int secsLeft = (int) millisUntilFinished / 1000;
-//                setGameTime(secsLeft);
-//
-//                // Update word time left
-//                if (!wordCompleted) {
-//                    int deltaRemainingMillis = lastRemainingMillis - (int) millisUntilFinished;
-//                    wordTimerView.updateMsLeft(deltaRemainingMillis);
-//                    lastRemainingMillis = (int) millisUntilFinished;
-//                }
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                gameOver();
-//            }
-//        }.start();
+        new CountDownTimer(gameTimeMillis, CLOCK_INTERVAL_MILLISECONDS) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // Update game time left
+                int secsLeft = (int) millisUntilFinished / 1000;
+                setGameTime(secsLeft);
+
+                // Update word time left
+                if (!wordCompleted) {
+                    int deltaRemainingMillis = lastRemainingMillis - (int) millisUntilFinished;
+                    wordTimerView.updateMsLeft(deltaRemainingMillis);
+                    lastRemainingMillis = (int) millisUntilFinished;
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                gameOver();
+            }
+        }.start();
 
         // Get first word
         nextWord.setText(pullWordFromWordPool());
@@ -126,7 +142,7 @@ public class PlayActivity extends AppCompatActivity
     private void gameOver() {
         // Send to StatsActivity
         Intent intent = new Intent(PlayActivity.this, StatsActivity.class);
-//        startActivity(intent);
+        startActivity(intent);
     }
 
     /**

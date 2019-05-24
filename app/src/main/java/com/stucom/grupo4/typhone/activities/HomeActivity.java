@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.stucom.grupo4.typhone.R;
+import com.stucom.grupo4.typhone.control.AudioController;
+import com.stucom.grupo4.typhone.tools.Tools;
 
 public class HomeActivity extends AppCompatActivity {
 
-    public static MediaPlayer mediaPlayer;
+    private AudioController audio;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +38,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        // Settings button
         findViewById(R.id.btn_settings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,12 +47,18 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        mediaPlayer = MediaPlayer.create(this, R.raw.superboy);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
-
-
-
+        // Start Home music
+        audio = AudioController.getInstance();
+        audio.playMusic(this, R.raw.superboy);
+        Tools.log("create");
+    }
+    @Override protected void onResume() {
+        super.onResume();
+        audio.startMusic();
+    }
+    @Override protected void onPause() {
+        audio.pauseMusic();
+        super.onPause();
     }
 
     private void setupMainWindowDisplayMode() {

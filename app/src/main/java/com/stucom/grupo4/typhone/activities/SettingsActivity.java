@@ -6,36 +6,35 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import com.stucom.grupo4.typhone.R;
-
-import static com.stucom.grupo4.typhone.activities.HomeActivity.mediaPlayer;
+import com.stucom.grupo4.typhone.control.AudioController;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private Switch music;
+    private AudioController audio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        audio = AudioController.getInstance();
 
-        music = findViewById(R.id.music_switch);
-        music.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        Switch musicSwitch = findViewById(R.id.switchMusic);
+        musicSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    mediaPlayer.start();
-                }else{
-                    mediaPlayer.stop();
-                }
+                audio.muteMusic(!isChecked);
             }
         });
 
-        //findViewById(R.id.btn_languages).setOnClickListener();
+        Switch sfxSwitch = findViewById(R.id.switchSfx);
+        sfxSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                audio.muteMusic(!isChecked);
+            }
+        });
     }
 
-    public void changeLanguages(){
-
-    }
-
+    public void changeLanguages() { }
 }
