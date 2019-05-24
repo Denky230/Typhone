@@ -4,10 +4,12 @@ public class User {
 
     private String name;
     private String image;
+    private int highScore;
 
-    public User(String name, String image) {
+    public User(String name, String image, int highScore) {
         this.name = name;
         this.image = image;
+        this.highScore = highScore;
     }
 
     public String getName() {
@@ -16,4 +18,5 @@ public class User {
     public String getImage() {
         return image;
     }
+    public int getHighScore() { return highScore; }
 }
