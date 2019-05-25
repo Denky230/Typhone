@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.stucom.grupo4.typhone.R;
@@ -93,7 +92,7 @@ public class ScoreboardActivity extends AppCompatActivity {
             super(itemView);
             rank = itemView.findViewById(R.id.lblRank);
             score = itemView.findViewById(R.id.lblScore);
-            name = itemView.findViewById(R.id.lblUsername);
+            name = itemView.findViewById(R.id.lblScoreboard);
         }
     }
     class UsersAdapter extends RecyclerView.Adapter<UserViewHolder> {

@@ -7,7 +7,7 @@
     tools:context=".activities.SettingsActivity">
 
     <TextView
-        android:id="@+id/settingsTitle"
+        android:id="@+id/lblSettings"
         android:layout_width="wrap_content"
         android:layout_height="57dp"
         android:layout_marginStart="8dp"
@@ -30,11 +30,11 @@
         android:layout_marginEnd="8dp"
         android:checked="true"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/music_title"
+        app:layout_constraintBottom_toBottomOf="@+id/lblMusic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.083"
-        app:layout_constraintStart_toEndOf="@+id/music_title"
-        app:layout_constraintTop_toTopOf="@+id/music_title" />
+        app:layout_constraintStart_toEndOf="@+id/lblMusic"
+        app:layout_constraintTop_toTopOf="@+id/lblMusic" />
 
     <Switch
         android:id="@+id/switchSfx"
@@ -67,11 +67,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.411"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/music_title"
+        app:layout_constraintTop_toBottomOf="@+id/lblMusic"
         app:layout_constraintVertical_bias="0.1" />
 
     <TextView
-        android:id="@+id/music_title"
+        android:id="@+id/lblMusic"
         android:layout_width="74dp"
         android:layout_height="28dp"
         android:layout_marginStart="8dp"
@@ -85,7 +85,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.408"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settingsTitle"
+        app:layout_constraintTop_toBottomOf="@+id/lblSettings"
         app:layout_constraintVertical_bias="0.171" />
 
     <Button
@@ -96,7 +96,6 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Languages"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -35,6 +35,4 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
     }
-
-    public void changeLanguages() { }
 }
