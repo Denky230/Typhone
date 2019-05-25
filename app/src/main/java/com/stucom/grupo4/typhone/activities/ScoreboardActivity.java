@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.stucom.grupo4.typhone.R;
+import com.stucom.grupo4.typhone.control.AudioController;
 import com.stucom.grupo4.typhone.model.User;
 
 import java.util.Arrays;
@@ -20,18 +21,14 @@ import java.util.List;
 
 public class ScoreboardActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scoreboard);
-        recyclerView = findViewById(R.id.recyclerView);
 
         initRecyclerView();
         fillRanking();
-    }
-    @Override protected void onPause(){
-        super.onPause();
     }
 
     private void initRecyclerView() {

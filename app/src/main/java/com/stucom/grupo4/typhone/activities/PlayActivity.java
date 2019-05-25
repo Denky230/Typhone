@@ -12,10 +12,6 @@ import com.stucom.grupo4.typhone.control.AudioController;
 import com.stucom.grupo4.typhone.control.GameController;
 import com.stucom.grupo4.typhone.model.modifiers.Modifier;
 import com.stucom.grupo4.typhone.model.modifiers.SpeedUp;
-import com.stucom.grupo4.typhone.model.modifiers.Test_01;
-import com.stucom.grupo4.typhone.model.modifiers.Test_02;
-import com.stucom.grupo4.typhone.model.modifiers.Test_03;
-import com.stucom.grupo4.typhone.tools.Tools;
 import com.stucom.grupo4.typhone.views.WordTimerView;
 import com.stucom.grupo4.typhone.views.WordToTypeView;
 
@@ -37,10 +33,11 @@ public class PlayActivity extends AppCompatActivity
     private AudioController audio;
 
     // Game timer
-    private final int GAME_TIME_SECONDS = 20;
+    private final int GAME_TIME_SECONDS = 60;
     private final int CLOCK_INTERVAL_MILLISECONDS = 10;
     private int lastRemainingMillis;
     private TextView txtGameTimer;
+    private CountDownTimer timer;
 
     // Score
     private final int RIGHT_INPUT = 10;
@@ -65,9 +62,7 @@ public class PlayActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
-        // Start Gameplay music
         audio = AudioController.getInstance();
-        audio.playMusic(this, R.raw.space_trip);
 
         // Initialize UI elements
         nextWord = findViewById(R.id.lblNextWord);
@@ -78,14 +73,27 @@ public class PlayActivity extends AppCompatActivity
         txtScore = findViewById(R.id.lblScore);
         txtGameTimer = findViewById(R.id.lblGameTimer);
 
+        // Set total game time
+        lastRemainingMillis = GAME_TIME_SECONDS * 1000;
+        txtGameTimer.setText(String.valueOf(GAME_TIME_SECONDS));
+
         startGame();
     }
     @Override protected void onResume() {
         super.onResume();
+
+        // Set game music
+        audio.setMusic(this, AudioController.Music.GAME, true);
         audio.startMusic();
+        // Resume game timer with game time left
+        timer = startGameTimer(lastRemainingMillis);
     }
     @Override protected void onPause() {
+        // Pause game music
         audio.pauseMusic();
+        // Pause game timer
+        timer.cancel();
+
         super.onPause();
     }
     @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -109,12 +117,13 @@ public class PlayActivity extends AppCompatActivity
         // Reset game variables
         setScore(0);
         lastWord = "";
-        wordCompleted = false;
 
-        // Start game timer
-        int gameTimeMillis = lastRemainingMillis = GAME_TIME_SECONDS * 1000;
-        txtGameTimer.setText(String.valueOf(GAME_TIME_SECONDS));
-        new CountDownTimer(gameTimeMillis, CLOCK_INTERVAL_MILLISECONDS) {
+        // Get first word
+        nextWord.setText(pullWordFromWordPool());
+        updateWordToType();
+    }
+    private CountDownTimer startGameTimer(int timerMillis) {
+        return new CountDownTimer(timerMillis, CLOCK_INTERVAL_MILLISECONDS) {
             @Override
             public void onTick(long millisUntilFinished) {
                 // Update game time left
@@ -134,15 +143,11 @@ public class PlayActivity extends AppCompatActivity
                 gameOver();
             }
         }.start();
-
-        // Get first word
-        nextWord.setText(pullWordFromWordPool());
-        updateWordToType();
     }
     private void gameOver() {
         // Send to StatsActivity
         Intent intent = new Intent(PlayActivity.this, StatsActivity.class);
-        startActivity(intent);
+//        startActivity(intent);
     }
 
     /**
