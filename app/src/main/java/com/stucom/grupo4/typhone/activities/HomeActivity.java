@@ -1,14 +1,12 @@
 package com.stucom.grupo4.typhone.activities;
 
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
 import com.stucom.grupo4.typhone.R;
 import com.stucom.grupo4.typhone.control.AudioController;
-import com.stucom.grupo4.typhone.tools.Tools;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -17,6 +15,8 @@ public class HomeActivity extends AppCompatActivity {
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        audio = AudioController.getInstance();
 
         // Play button
         findViewById(R.id.btnPlay).setOnClickListener(new View.OnClickListener() {
@@ -27,7 +27,6 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
         // Score button
         findViewById(R.id.btnScore).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,7 +36,6 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
         // Settings button
         findViewById(R.id.btn_settings).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,19 +44,13 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        // Start Home music
-        audio = AudioController.getInstance();
-        audio.playMusic(this, R.raw.superboy);
-        Tools.log("create");
     }
     @Override protected void onResume() {
         super.onResume();
+
+        // Set Menu music
+        audio.setMusic(this, AudioController.Music.MENU, true);
         audio.startMusic();
-    }
-    @Override protected void onPause() {
-        audio.pauseMusic();
-        super.onPause();
     }
 
     private void setupMainWindowDisplayMode() {
