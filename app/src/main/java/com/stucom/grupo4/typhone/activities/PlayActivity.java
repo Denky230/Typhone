@@ -29,17 +29,14 @@ import java.util.Locale;
 public class PlayActivity extends AppCompatActivity
         implements WordToTypeView.WordListener, WordTimerView.WordTimerListener {
 
-    /* TEST - Remove this when pulling from word pool */
-    /*String[] wordPool = new String[]{
-            "helicopter", "supermarket", "kitchen", "failure", "computer",
-            "trousers", "mouse", "monday", "teacher", "beautiful"
-    };*/
-
-    ArrayList<String> wordPool = new ArrayList<>();
-    /* ---------------- */
+    // Game word pool
+    private ArrayList<String> wordPool;
 
     // Audio
     private AudioController audio;
+
+    // Stats
+    private Stats stats;
 
     // Game timer
     private final int GAME_TIME_SECONDS = 60;
@@ -53,11 +50,8 @@ public class PlayActivity extends AppCompatActivity
     private TextView txtScore;
     private int score;
 
-    // Stats
-    private Stats stats;
-
     // Game modifiers
-    private final List<Modifier> activeModifiers = new ArrayList<>();
+    private List<Modifier> activeModifiers;
 
     // Word timer
     private WordTimerView wordTimerView;
@@ -74,9 +68,6 @@ public class PlayActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
-        audio = AudioController.getInstance();
-        audio.setMusic(this, AudioController.Music.GAME, true);
-
         // Initialize UI elements
         nextWord = findViewById(R.id.lblNextWord);
         wordTimerView = findViewById(R.id.wordTimerView);
@@ -86,12 +77,16 @@ public class PlayActivity extends AppCompatActivity
         txtScore = findViewById(R.id.lblScore);
         txtGameTimer = findViewById(R.id.lblGameTimer);
 
+        audio = AudioController.getInstance();
+        activeModifiers = new ArrayList<>();
+        wordPool = new ArrayList<>();
+        stats = new Stats();
+
         // Set total game time
         lastRemainingMillis = GAME_TIME_SECONDS * 1000;
         txtGameTimer.setText(String.valueOf(GAME_TIME_SECONDS));
 
-        stats = new Stats();
-
+        // Load Default words
         readWordPool();
         startGame();
     }
@@ -120,6 +115,7 @@ public class PlayActivity extends AppCompatActivity
 
             // Pass character input to WordView
             boolean isRight = wordView.validateInput(letterTyped);
+
             // Add new input to stats
             stats.addInput(isRight);
         }
@@ -135,6 +131,16 @@ public class PlayActivity extends AppCompatActivity
         // Get first word
         nextWord.setText(pullWordFromWordPool());
         updateWordToType();
+    }
+    private void gameOver() {
+        // Set game score to game stats
+        stats.setScore(this.score);
+
+        // Send to StatsActivity
+        Intent intent = new Intent(PlayActivity.this, StatsActivity.class);
+        // Pass stats object to StatsActivity
+        intent.putExtra("stats", stats);
+//        startActivity(intent);
     }
     private CountDownTimer startGameTimer(int timerMillis) {
         return new CountDownTimer(timerMillis, CLOCK_INTERVAL_MILLISECONDS) {
@@ -157,14 +163,6 @@ public class PlayActivity extends AppCompatActivity
                 gameOver();
             }
         }.start();
-    }
-    private void gameOver() {
-
-        stats.setScore(this.score);
-
-        // Send to StatsActivity
-        Intent intent = new Intent(PlayActivity.this, StatsActivity.class);
-//        startActivity(intent);
     }
 
     /**
@@ -200,20 +198,19 @@ public class PlayActivity extends AppCompatActivity
         nextWord.setText(newWord);
     }
 
-    //Add words from the default wordpool to array
-    private void readWordPool(){
-
-        try{
-            BufferedReader reader = new BufferedReader(new InputStreamReader(getAssets().open("defaultWordPool.csv")));
-            String line = null;
-
-            while((line = reader.readLine()) != null){
+    // Add words from the default word pool to array
+    private void readWordPool() {
+        try {
+            InputStreamReader inputStreamReader =
+                    new InputStreamReader(getAssets().open("defaultWordPool.csv"));
+            BufferedReader reader = new BufferedReader(inputStreamReader);
+            String line;
+            while ((line = reader.readLine()) != null) {
                 wordPool.add(line);
             }
-        }catch(IOException e){
+        } catch (IOException e) {
             e.getStackTrace();
         }
-
     }
 
     // WordToType

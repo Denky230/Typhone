@@ -1,28 +1,17 @@
 package com.stucom.grupo4.typhone.model;
 
-public class Stats {
+import java.io.Serializable;
 
-    int score;
-    int inputsTotal, inputsRight, inputsWrong;
-    int accuracy;
-    float ipsMax, ipsAvg;
-    int hiStreakWord, hiStreakLetter;
+public class Stats implements Serializable {
 
-    public Stats(int score, int inputsTotal, int accuracy, float ipsMax, float ipsAvg, int hiStreakWord, int hiStreakLetter) {
-        this.score = score;
-        this.inputsTotal = inputsTotal;
-        this.accuracy = accuracy;
-        this.ipsMax = ipsMax;
-        this.ipsAvg = ipsAvg;
-        this.hiStreakWord = hiStreakWord;
-        this.hiStreakLetter = hiStreakLetter;
-    }
-    public Stats() {}
+    private int score;
+    private int inputsTotal, inputsRight, inputsWrong;
+    private int hiStreakWord, hiStreakLetter;
+    private float ipsMax, ipsAvg;
 
     public int getScore() {
         return score;
     }
-
     public void setScore(int score) {
         this.score = score;
     }
@@ -30,48 +19,33 @@ public class Stats {
     public int getInputsTotal() {
         return inputsTotal;
     }
-
-    public void setInputsTotal(int inputsTotal) {
-        this.inputsTotal = inputsTotal;
-    }
-
-    public void addInput(boolean isRight){
-        if(isRight){
+    public void addInput(boolean isRight) {
+        if (isRight) {
             inputsRight++;
-        }else{
+        } else {
             inputsWrong++;
         }
         inputsTotal++;
     }
 
     public int getAccuracy() {
-        return accuracy;
-    }
-
-    public void setAccuracy(int accuracy) {
-        this.accuracy = accuracy;
+        return 100 / (inputsTotal / inputsRight);
     }
 
     public float getIpsMax() {
         return ipsMax;
     }
-
-    public void setIpsMax(float ipsMax) {
-        this.ipsMax = ipsMax;
-    }
-
     public float getIpsAvg() {
         return ipsAvg;
     }
-
     public void setIpsAvg(float ipsAvg) {
+        if (ipsAvg > ipsMax) ipsMax = ipsAvg;
         this.ipsAvg = ipsAvg;
     }
 
     public int getHiStreakWord() {
         return hiStreakWord;
     }
-
     public void setHiStreakWord(int hiStreakWord) {
         this.hiStreakWord = hiStreakWord;
     }
@@ -79,7 +53,6 @@ public class Stats {
     public int getHiStreakLetter() {
         return hiStreakLetter;
     }
-
     public void setHiStreakLetter(int hiStreakLetter) {
         this.hiStreakLetter = hiStreakLetter;
     }
