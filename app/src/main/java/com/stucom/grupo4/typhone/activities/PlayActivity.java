@@ -75,6 +75,7 @@ public class PlayActivity extends AppCompatActivity
         setContentView(R.layout.activity_play);
 
         audio = AudioController.getInstance();
+        audio.setMusic(this, AudioController.Music.GAME, true);
 
         // Initialize UI elements
         nextWord = findViewById(R.id.lblNextWord);
