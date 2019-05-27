@@ -12,9 +12,15 @@ import com.stucom.grupo4.typhone.control.AudioController;
 import com.stucom.grupo4.typhone.control.GameController;
 import com.stucom.grupo4.typhone.model.modifiers.Modifier;
 import com.stucom.grupo4.typhone.model.modifiers.SpeedUp;
+import com.stucom.grupo4.typhone.tools.Tools;
 import com.stucom.grupo4.typhone.views.WordTimerView;
 import com.stucom.grupo4.typhone.views.WordToTypeView;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -23,10 +29,12 @@ public class PlayActivity extends AppCompatActivity
         implements WordToTypeView.WordListener, WordTimerView.WordTimerListener {
 
     /* TEST - Remove this when pulling from word pool */
-    String[] wordPool = new String[]{
+    /*String[] wordPool = new String[]{
             "helicopter", "supermarket", "kitchen", "failure", "computer",
             "trousers", "mouse", "monday", "teacher", "beautiful"
-    };
+    };*/
+
+    ArrayList<String> wordPool = new ArrayList<>();
     /* ---------------- */
 
     // Audio
@@ -77,6 +85,7 @@ public class PlayActivity extends AppCompatActivity
         lastRemainingMillis = GAME_TIME_SECONDS * 1000;
         txtGameTimer.setText(String.valueOf(GAME_TIME_SECONDS));
 
+        readWordPool();
         startGame();
     }
     @Override protected void onResume() {
@@ -158,8 +167,8 @@ public class PlayActivity extends AppCompatActivity
         // Keep pulling til non-repeated word comes out
         String randWord;
         do {
-            int randIndex = (int) (Math.random() * wordPool.length);
-            randWord = wordPool[randIndex];
+            int randIndex = (int) (Math.random() * wordPool.size());
+            randWord = wordPool.get(randIndex);
         } while (randWord.equals(lastWord));
 
         // Save word pulled so the process can be repeated
@@ -181,6 +190,22 @@ public class PlayActivity extends AppCompatActivity
         // Get random new word
         String newWord = pullWordFromWordPool();
         nextWord.setText(newWord);
+    }
+
+    //Add words from the default wordpool to array
+    private void readWordPool(){
+
+        try{
+            BufferedReader reader = new BufferedReader(new InputStreamReader(getAssets().open("defaultWordPool.csv")));
+            String line = null;
+
+            while((line = reader.readLine()) != null){
+                wordPool.add(line);
+            }
+        }catch(IOException e){
+            e.getStackTrace();
+        }
+
     }
 
     // WordToType
