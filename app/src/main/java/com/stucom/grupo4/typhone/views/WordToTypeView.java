@@ -11,6 +11,8 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.stucom.grupo4.typhone.model.Letter;
+import com.stucom.grupo4.typhone.model.Word;
 import com.stucom.grupo4.typhone.tools.Tools;
 
 public class WordToTypeView extends View {
@@ -26,6 +28,9 @@ public class WordToTypeView extends View {
     private final int FONT_SIZE = 100;
 
     private final TextPaint paint;
+
+    /* TEST */
+    private Word palabro;
 
     public WordToTypeView(Context context) {
         this(context, null, 0);
@@ -54,6 +59,8 @@ public class WordToTypeView extends View {
 
         // Set WordToType to new word
         this.word = word.toUpperCase();
+        /* TEST */
+        this.palabro = new Word(this.word);
 
         // Reset cursor position
         cursor = 0;
@@ -95,7 +102,7 @@ public class WordToTypeView extends View {
     }
 
     @Override protected void onDraw(Canvas canvas) {
-        drawBien(canvas);
+        drawTest(canvas);
     }
 
     private void drawBien(Canvas canvas) {
@@ -164,6 +171,9 @@ public class WordToTypeView extends View {
         }
     }
     private void drawTest(Canvas canvas) {
+
+        ///Save word currently displayed
+        String word = palabro.getWord();
         // Save word rect on wordBounds
         paint.getTextBounds(word, 0, word.length(), wordBounds);
 
@@ -174,10 +184,20 @@ public class WordToTypeView extends View {
         // Figure out word's X
         // Check if word fits in view
         float wordWidth = paint.measureText(word);
-        if (wordWidth < getWidth()) {
 
-            // Center word's X
-            x = (getWidth() - wordWidth) / 2;
+        // Set word's first letter's X
+        x = (getWidth() - wordWidth) / 2;
+        palabro.getLetterAt(0).setX(x);
+        // Set word's other letters' Xs
+        for (int i = 1; i < palabro.getLength(); i++) {
+            char prevChar = word.charAt(i - 1);
+            // Measure previous letter + add amount to X
+            x += paint.measureText(String.valueOf(prevChar));
+            // Set accumulated X to curr letter
+            palabro.getLetterAt(i).setX(x);
+        }
+
+        if (wordWidth < getWidth()) {
 
         } else {
 
@@ -215,23 +235,15 @@ public class WordToTypeView extends View {
             // endregion
         }
 
-        int scaleX = -1;
-        canvas.scale(scaleX, 1);
-        canvas.translate(x * 2 * scaleX, 0);
-
         // Draw letters
-        char[] letters = word.toCharArray();
+        Letter[] letters = palabro.getLetters();
         for (int i = 0; i < letters.length; i++) {
-            // Draw text in corresponding color
+
+            Letter letter = letters[i];
+
+            // Draw letter using its own color & position
             paint.setColor(wordColors[i]);
-            canvas.drawText(String.valueOf(letters[i]), x, y, paint);
-
-            // Get letter width
-            float w = paint.measureText(String.valueOf(letters[i]));
-            // Move position to next letter
-            canvas.translate(w * scaleX, 0);
-
-            Tools.log(letters[i] + " - " + x);
+            canvas.drawText(String.valueOf(letter.getCharacter()), letter.getX(), y, paint);
         }
     }
 

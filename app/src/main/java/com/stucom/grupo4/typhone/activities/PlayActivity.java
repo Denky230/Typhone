@@ -12,14 +12,10 @@ import com.stucom.grupo4.typhone.control.AudioController;
 import com.stucom.grupo4.typhone.control.GameController;
 import com.stucom.grupo4.typhone.model.Stats;
 import com.stucom.grupo4.typhone.model.modifiers.Modifier;
-import com.stucom.grupo4.typhone.model.modifiers.SpeedUp;
-import com.stucom.grupo4.typhone.tools.Tools;
 import com.stucom.grupo4.typhone.views.WordTimerView;
 import com.stucom.grupo4.typhone.views.WordToTypeView;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -30,7 +26,7 @@ public class PlayActivity extends AppCompatActivity
         implements WordToTypeView.WordListener, WordTimerView.WordTimerListener {
 
     // Game word pool
-    private ArrayList<String> wordPool;
+    private List<String> wordPool;
 
     // Audio
     private AudioController audio;
@@ -76,6 +72,7 @@ public class PlayActivity extends AppCompatActivity
         wordView.setWordListener(this);
         txtScore = findViewById(R.id.lblScore);
         txtGameTimer = findViewById(R.id.lblGameTimer);
+        txtGameTimer.setTranslationY(-25f);
 
         audio = AudioController.getInstance();
         activeModifiers = new ArrayList<>();
