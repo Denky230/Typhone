@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.stucom.grupo4.typhone.R;
 import com.stucom.grupo4.typhone.control.AudioController;
 import com.stucom.grupo4.typhone.control.GameController;
+import com.stucom.grupo4.typhone.model.Stats;
 import com.stucom.grupo4.typhone.model.modifiers.Modifier;
 import com.stucom.grupo4.typhone.model.modifiers.SpeedUp;
 import com.stucom.grupo4.typhone.tools.Tools;
@@ -52,6 +53,9 @@ public class PlayActivity extends AppCompatActivity
     private TextView txtScore;
     private int score;
 
+    // Stats
+    private Stats stats;
+
     // Game modifiers
     private final List<Modifier> activeModifiers = new ArrayList<>();
 
@@ -85,6 +89,8 @@ public class PlayActivity extends AppCompatActivity
         lastRemainingMillis = GAME_TIME_SECONDS * 1000;
         txtGameTimer.setText(String.valueOf(GAME_TIME_SECONDS));
 
+        stats = new Stats();
+
         readWordPool();
         startGame();
     }
@@ -111,12 +117,10 @@ public class PlayActivity extends AppCompatActivity
             String key = KeyEvent.keyCodeToString(keyCode);
             char letterTyped = key.substring(key.length() - 1).charAt(0);
 
-            if (keyCode == KeyEvent.KEYCODE_SPACE) {
-                new SpeedUp().activate();
-            }
-
             // Pass character input to WordView
-            wordView.validateInput(letterTyped);
+            boolean isRight = wordView.validateInput(letterTyped);
+            // Add new input to stats
+            stats.addInput(isRight);
         }
 
         return super.onKeyDown(keyCode, event);
@@ -154,6 +158,9 @@ public class PlayActivity extends AppCompatActivity
         }.start();
     }
     private void gameOver() {
+
+        stats.setScore(this.score);
+
         // Send to StatsActivity
         Intent intent = new Intent(PlayActivity.this, StatsActivity.class);
 //        startActivity(intent);
