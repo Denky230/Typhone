@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.stucom.grupo4.typhone.R;
-import com.stucom.grupo4.typhone.control.AudioController;
 import com.stucom.grupo4.typhone.model.User;
 
 import java.util.Arrays;
@@ -89,7 +88,7 @@ public class ScoreboardActivity extends AppCompatActivity {
             super(itemView);
             rank = itemView.findViewById(R.id.lblRank);
             score = itemView.findViewById(R.id.lblScore);
-            name = itemView.findViewById(R.id.lblScoreboard);
+            name = itemView.findViewById(R.id.lblUsername);
         }
     }
     class UsersAdapter extends RecyclerView.Adapter<UserViewHolder> {
