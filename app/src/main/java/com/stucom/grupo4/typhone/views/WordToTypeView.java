@@ -65,7 +65,7 @@ public class WordToTypeView extends View {
         }
     }
 
-    public void validateInput(char letterInput) {
+    public boolean validateInput(char letterInput) {
         // Request redraw
         this.invalidate();
 
@@ -86,6 +86,7 @@ public class WordToTypeView extends View {
         if (cursor == word.length()) {
             listener.wordCompleted();
         }
+        return right;
     }
     private boolean isInputRight(char letterInput) {
         String letterToType = String.valueOf(word.charAt(cursor));

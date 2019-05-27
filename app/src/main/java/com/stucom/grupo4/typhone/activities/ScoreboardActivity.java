@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.stucom.grupo4.typhone.R;
@@ -21,18 +20,14 @@ import java.util.List;
 
 public class ScoreboardActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scoreboard);
-        recyclerView = findViewById(R.id.recyclerView);
 
         initRecyclerView();
         fillRanking();
-    }
-    @Override protected void onPause(){
-        super.onPause();
     }
 
     private void initRecyclerView() {

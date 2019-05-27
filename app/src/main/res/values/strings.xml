@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Typhone</string>
+    <string name="btnPlay">Play</string>
+    <string name="btnScore">Score</string>
+    <string name="lblScoreboard">Scoreboard</string>
+    <string name="lblSettings">Settings</string>
+    <string name="lblMusic">Music</string>
+    <string name="btn_languages">English</string>
 </resources>

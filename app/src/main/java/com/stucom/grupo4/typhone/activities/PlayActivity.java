@@ -10,15 +10,18 @@ import android.widget.TextView;
 import com.stucom.grupo4.typhone.R;
 import com.stucom.grupo4.typhone.control.AudioController;
 import com.stucom.grupo4.typhone.control.GameController;
+import com.stucom.grupo4.typhone.model.Stats;
 import com.stucom.grupo4.typhone.model.modifiers.Modifier;
 import com.stucom.grupo4.typhone.model.modifiers.SpeedUp;
-import com.stucom.grupo4.typhone.model.modifiers.Test_01;
-import com.stucom.grupo4.typhone.model.modifiers.Test_02;
-import com.stucom.grupo4.typhone.model.modifiers.Test_03;
 import com.stucom.grupo4.typhone.tools.Tools;
 import com.stucom.grupo4.typhone.views.WordTimerView;
 import com.stucom.grupo4.typhone.views.WordToTypeView;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -27,25 +30,31 @@ public class PlayActivity extends AppCompatActivity
         implements WordToTypeView.WordListener, WordTimerView.WordTimerListener {
 
     /* TEST - Remove this when pulling from word pool */
-    String[] wordPool = new String[]{
+    /*String[] wordPool = new String[]{
             "helicopter", "supermarket", "kitchen", "failure", "computer",
             "trousers", "mouse", "monday", "teacher", "beautiful"
-    };
+    };*/
+
+    ArrayList<String> wordPool = new ArrayList<>();
     /* ---------------- */
 
     // Audio
     private AudioController audio;
 
     // Game timer
-    private final int GAME_TIME_SECONDS = 20;
+    private final int GAME_TIME_SECONDS = 60;
     private final int CLOCK_INTERVAL_MILLISECONDS = 10;
     private int lastRemainingMillis;
     private TextView txtGameTimer;
+    private CountDownTimer timer;
 
     // Score
     private final int RIGHT_INPUT = 10;
     private TextView txtScore;
     private int score;
+
+    // Stats
+    private Stats stats;
 
     // Game modifiers
     private final List<Modifier> activeModifiers = new ArrayList<>();
@@ -65,9 +74,7 @@ public class PlayActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
-        // Start Gameplay music
         audio = AudioController.getInstance();
-//        audio.playMusic(this, R.raw.space_trip);
 
         // Initialize UI elements
         nextWord = findViewById(R.id.lblNextWord);
@@ -78,14 +85,30 @@ public class PlayActivity extends AppCompatActivity
         txtScore = findViewById(R.id.lblScore);
         txtGameTimer = findViewById(R.id.lblGameTimer);
 
+        // Set total game time
+        lastRemainingMillis = GAME_TIME_SECONDS * 1000;
+        txtGameTimer.setText(String.valueOf(GAME_TIME_SECONDS));
+
+        stats = new Stats();
+
+        readWordPool();
         startGame();
     }
     @Override protected void onResume() {
         super.onResume();
+
+        // Set game music
+        audio.setMusic(this, AudioController.Music.GAME, true);
         audio.startMusic();
+        // Resume game timer with game time left
+        timer = startGameTimer(lastRemainingMillis);
     }
     @Override protected void onPause() {
+        // Pause game music
         audio.pauseMusic();
+        // Pause game timer
+        timer.cancel();
+
         super.onPause();
     }
     @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -94,12 +117,10 @@ public class PlayActivity extends AppCompatActivity
             String key = KeyEvent.keyCodeToString(keyCode);
             char letterTyped = key.substring(key.length() - 1).charAt(0);
 
-            if (keyCode == KeyEvent.KEYCODE_SPACE) {
-                new SpeedUp().activate();
-            }
-
             // Pass character input to WordView
-            wordView.validateInput(letterTyped);
+            boolean isRight = wordView.validateInput(letterTyped);
+            // Add new input to stats
+            stats.addInput(isRight);
         }
 
         return super.onKeyDown(keyCode, event);
@@ -109,12 +130,13 @@ public class PlayActivity extends AppCompatActivity
         // Reset game variables
         setScore(0);
         lastWord = "";
-        wordCompleted = false;
 
-        // Start game timer
-        int gameTimeMillis = lastRemainingMillis = GAME_TIME_SECONDS * 1000;
-        txtGameTimer.setText(String.valueOf(GAME_TIME_SECONDS));
-        new CountDownTimer(gameTimeMillis, CLOCK_INTERVAL_MILLISECONDS) {
+        // Get first word
+        nextWord.setText(pullWordFromWordPool());
+        updateWordToType();
+    }
+    private CountDownTimer startGameTimer(int timerMillis) {
+        return new CountDownTimer(timerMillis, CLOCK_INTERVAL_MILLISECONDS) {
             @Override
             public void onTick(long millisUntilFinished) {
                 // Update game time left
@@ -134,15 +156,14 @@ public class PlayActivity extends AppCompatActivity
                 gameOver();
             }
         }.start();
-
-        // Get first word
-        nextWord.setText(pullWordFromWordPool());
-        updateWordToType();
     }
     private void gameOver() {
+
+        stats.setScore(this.score);
+
         // Send to StatsActivity
         Intent intent = new Intent(PlayActivity.this, StatsActivity.class);
-        startActivity(intent);
+//        startActivity(intent);
     }
 
     /**
@@ -153,8 +174,8 @@ public class PlayActivity extends AppCompatActivity
         // Keep pulling til non-repeated word comes out
         String randWord;
         do {
-            int randIndex = (int) (Math.random() * wordPool.length);
-            randWord = wordPool[randIndex];
+            int randIndex = (int) (Math.random() * wordPool.size());
+            randWord = wordPool.get(randIndex);
         } while (randWord.equals(lastWord));
 
         // Save word pulled so the process can be repeated
@@ -176,6 +197,22 @@ public class PlayActivity extends AppCompatActivity
         // Get random new word
         String newWord = pullWordFromWordPool();
         nextWord.setText(newWord);
+    }
+
+    //Add words from the default wordpool to array
+    private void readWordPool(){
+
+        try{
+            BufferedReader reader = new BufferedReader(new InputStreamReader(getAssets().open("defaultWordPool.csv")));
+            String line = null;
+
+            while((line = reader.readLine()) != null){
+                wordPool.add(line);
+            }
+        }catch(IOException e){
+            e.getStackTrace();
+        }
+
     }
 
     // WordToType

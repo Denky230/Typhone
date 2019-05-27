@@ -11,6 +11,9 @@ public class User {
         this.image = image;
         this.highScore = highScore;
     }
+    public User(String name, String image) {
+        this(name, image, 0);
+    }
 
     public String getName() {
         return name;
