@@ -6,7 +6,6 @@ import android.media.MediaPlayer;
 import android.media.SoundPool;
 
 import com.stucom.grupo4.typhone.R;
-import com.stucom.grupo4.typhone.tools.Tools;
 
 public class AudioController {
 
