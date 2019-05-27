@@ -67,7 +67,7 @@ public class PlayActivity extends AppCompatActivity
 
         // Start Gameplay music
         audio = AudioController.getInstance();
-        audio.playMusic(this, R.raw.space_trip);
+//        audio.playMusic(this, R.raw.space_trip);
 
         // Initialize UI elements
         nextWord = findViewById(R.id.lblNextWord);
