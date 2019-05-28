@@ -11,8 +11,7 @@ import com.stucom.grupo4.typhone.R;
 import com.stucom.grupo4.typhone.control.AudioController;
 import com.stucom.grupo4.typhone.control.GameController;
 import com.stucom.grupo4.typhone.model.Stats;
-import com.stucom.grupo4.typhone.model.modifiers.Modifier;
-import com.stucom.grupo4.typhone.model.modifiers.WordModifier;
+import com.stucom.grupo4.typhone.tools.Tools;
 import com.stucom.grupo4.typhone.views.WordTimerView;
 import com.stucom.grupo4.typhone.views.WordToTypeView;
 
@@ -26,10 +25,23 @@ import java.util.Locale;
 public class PlayActivity extends AppCompatActivity
         implements WordToTypeView.WordListener, WordTimerView.WordTimerListener {
 
+    // Event states
+    public enum EventState {
+        EVENT_DOWNTIME(5),
+        EVENT_ANNOUNCEMENT(5),
+        EVENT_ACTIVE(5),
+        MODIFIER_ACTIVE(5);
+
+        int seconds;    // state duration
+        EventState(int seconds) { this.seconds = seconds; }
+    }
+    private EventState eventState;
+    private int nextEventStateSeconds;
+
     // Game timer
-    private final int GAME_TIME_SECONDS = 60;
-    private final int CLOCK_INTERVAL_MILLISECONDS = 10;
-    private int lastRemainingMillis;
+    private final int GAME_TIME_SECONDS = 10;
+    private final int CLOCK_INTERVAL_MILLISECONDS = 1000;
+    private int lastRemainingMs;
     private TextView txtGameTimer;
     private CountDownTimer timer;
 
@@ -74,7 +86,7 @@ public class PlayActivity extends AppCompatActivity
         stats = new Stats();
 
         // Set total game time
-        lastRemainingMillis = GAME_TIME_SECONDS * 1000;
+        lastRemainingMs = GAME_TIME_SECONDS * 1000;
         txtGameTimer.setText(String.valueOf(GAME_TIME_SECONDS));
 
         // Load Default words
@@ -88,14 +100,18 @@ public class PlayActivity extends AppCompatActivity
         // Set game music
         audio.setMusic(this, AudioController.Music.GAME, true);
         audio.startMusic();
-        // Resume game timer with game time left
-        timer = startGameTimer(lastRemainingMillis);
+
+        // Resume timers with time left
+        startGameTimer(lastRemainingMs);
+        wordTimerView.resumeTimer();
     }
     @Override protected void onPause() {
         // Pause game music
         audio.pauseMusic();
-        // Pause game timer
+
+        // Pause timers
         timer.cancel();
+        wordTimerView.stopTimer();
 
         super.onPause();
     }
@@ -120,6 +136,9 @@ public class PlayActivity extends AppCompatActivity
         setScore(0);
         lastWord = "";
 
+        // Set starting event state
+        setEventState(EventState.values()[0]);
+
         // Get first word
         nextWord.setText(pullWordFromWordPool());
         updateWordToType();
@@ -134,20 +153,16 @@ public class PlayActivity extends AppCompatActivity
         intent.putExtra("stats", stats);
 //        startActivity(intent);
     }
-    private CountDownTimer startGameTimer(int timerMillis) {
-        return new CountDownTimer(timerMillis, CLOCK_INTERVAL_MILLISECONDS) {
+    private void startGameTimer(int totalMs) {
+        timer = new CountDownTimer(totalMs, CLOCK_INTERVAL_MILLISECONDS) {
             @Override
             public void onTick(long millisUntilFinished) {
                 // Update game time left
                 int secsLeft = (int) millisUntilFinished / 1000;
                 setGameTime(secsLeft);
 
-                // Update word time left
-                if (!wordCompleted) {
-                    int deltaRemainingMillis = lastRemainingMillis - (int) millisUntilFinished;
-                    wordTimerView.updateMsLeft(deltaRemainingMillis);
-                    lastRemainingMillis = (int) millisUntilFinished;
-                }
+                // Check game time
+                int gameTimeSecs = GAME_TIME_SECONDS - secsLeft;
             }
 
             @Override
@@ -155,6 +170,31 @@ public class PlayActivity extends AppCompatActivity
                 gameOver();
             }
         }.start();
+    }
+
+    // Event states
+    public void nextEventState() {
+        int currStateOrdinal = this.eventState.ordinal();
+        int nextStateOrdinal = ++currStateOrdinal == EventState.values().length ? 0 : currStateOrdinal;
+        setEventState(EventState.values()[nextStateOrdinal]);
+    }
+    public void setEventState(EventState eventState) {
+        this.eventState = eventState;
+        this.nextEventStateSeconds += eventState.seconds;
+        switch (eventState) {
+
+            case EVENT_DOWNTIME:
+                break;
+
+            case EVENT_ANNOUNCEMENT:
+                break;
+
+            case EVENT_ACTIVE:
+                break;
+
+            case MODIFIER_ACTIVE:
+                break;
+        }
     }
 
     /**
@@ -183,7 +223,7 @@ public class PlayActivity extends AppCompatActivity
 
         // Pass time to type current word to WordTimerView
         int currWordTotalMs = GameController.LETTER_TIME_MILLISECONDS * currWord.length();
-        wordTimerView.setTotalMs(currWordTotalMs);
+        wordTimerView.startTimer(currWordTotalMs);
 
         // Get random new word
         String newWord = pullWordFromWordPool();
