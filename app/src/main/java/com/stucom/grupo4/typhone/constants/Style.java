@@ -1,12 +1,11 @@
 package com.stucom.grupo4.typhone.constants;
 
 import android.graphics.Color;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 
-@RequiresApi(api = Build.VERSION_CODES.O)
 public class Style {
 
-    public static final Color right = Color.valueOf(Color.GREEN);
-    public static final Color wrong = Color.valueOf(Color.RED);
+    public static final int RIGHT = Color.rgb(0, 255, 0);
+    public static final int WRONG = Color.rgb(255, 0, 0);
+
+    public static final int FONT_SIZE = 120;
 }
