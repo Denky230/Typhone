@@ -12,6 +12,7 @@ import com.stucom.grupo4.typhone.control.AudioController;
 import com.stucom.grupo4.typhone.control.GameController;
 import com.stucom.grupo4.typhone.model.Stats;
 import com.stucom.grupo4.typhone.model.modifiers.Modifier;
+import com.stucom.grupo4.typhone.model.modifiers.WordModifier;
 import com.stucom.grupo4.typhone.views.WordTimerView;
 import com.stucom.grupo4.typhone.views.WordToTypeView;
 
@@ -39,8 +40,6 @@ public class PlayActivity extends AppCompatActivity
 
     // Word pool currently pulling from
     private List<String> wordPool;
-    // Modifiers currently active
-    private List<Modifier> activeModifiers;
 
     // WordTimer view
     private WordTimerView wordTimerView;
@@ -71,7 +70,6 @@ public class PlayActivity extends AppCompatActivity
         txtGameTimer.setTranslationY(-25f);
 
         audio = AudioController.getInstance();
-        activeModifiers = new ArrayList<>();
         wordPool = new ArrayList<>();
         stats = new Stats();
 

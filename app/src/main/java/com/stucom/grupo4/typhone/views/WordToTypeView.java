@@ -11,13 +11,14 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.stucom.grupo4.typhone.constants.Style;
+import com.stucom.grupo4.typhone.control.GameController;
 import com.stucom.grupo4.typhone.model.Letter;
 import com.stucom.grupo4.typhone.model.Word;
-import com.stucom.grupo4.typhone.model.modifiers.BlinkingWords;
-import com.stucom.grupo4.typhone.model.modifiers.MirroredWords;
-import com.stucom.grupo4.typhone.tools.Tools;
+import com.stucom.grupo4.typhone.model.modifiers.WordModifier;
 
 public class WordToTypeView extends View {
+
+    private final GameController gameController;
 
     private Word word;      // Word to type
     private int cursor;     // Current letter index
@@ -32,6 +33,8 @@ public class WordToTypeView extends View {
     }
     public WordToTypeView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        gameController = GameController.getInstance();
 
         // Initialize text paints
         paint = new TextPaint();
@@ -135,7 +138,6 @@ public class WordToTypeView extends View {
 //            canvas.drawRect(screenThreshold ,0, screenThreshold + 5, getHeight(), paint);
 //
 //            paint.setColor(Color.BLACK);
-//            // endregion
 //        }
 //
 //        // Draw letters
@@ -192,18 +194,20 @@ public class WordToTypeView extends View {
                 x = 0;
             }
 
-            // View
-            paint.setColor(Color.CYAN);
-            canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
-            // Word
-            paint.setColor(Color.LTGRAY);
-            canvas.drawRect(x, 0, wordEnd, getHeight(), paint);
-            // Written letters
-            paint.setColor(Color.YELLOW);
-            canvas.drawRect(x, y, writtenLettersWidth, getHeight(), paint);
-            // Threshold
-            paint.setColor(Color.MAGENTA);
-            canvas.drawRect(screenThreshold ,0, screenThreshold + 5, getHeight(), paint);
+            // region TEST BARS
+//            // View
+//            paint.setColor(Color.CYAN);
+//            canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
+//            // Word
+//            paint.setColor(Color.LTGRAY);
+//            canvas.drawRect(x, 0, wordEnd, getHeight(), paint);
+//            // Written letters
+//            paint.setColor(Color.YELLOW);
+//            canvas.drawRect(x, y, writtenLettersWidth, getHeight(), paint);
+//            // Threshold
+//            paint.setColor(Color.MAGENTA);
+//            canvas.drawRect(screenThreshold ,0, screenThreshold + 5, getHeight(), paint);
+            // endregion
         }
 
         // Set word's first letter's X
@@ -218,8 +222,9 @@ public class WordToTypeView extends View {
         }
 
         // Apply word modifiers here
-//        new BlinkingWords().modifyWord(word, paint, this);
-//        new MirroredWords().modifyWord(word, paint, this);
+        for (WordModifier wordModifier : gameController.getActiveWordModifiers()) {
+            wordModifier.modifyWord(word, paint, this);
+        }
 
         // Conform canvas scale.x to word scale.x
         int scale = word.getScaleX();
