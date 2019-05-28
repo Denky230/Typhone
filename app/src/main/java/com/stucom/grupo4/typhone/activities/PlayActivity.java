@@ -25,15 +25,6 @@ import java.util.Locale;
 public class PlayActivity extends AppCompatActivity
         implements WordToTypeView.WordListener, WordTimerView.WordTimerListener {
 
-    // Game word pool
-    private List<String> wordPool;
-
-    // Audio
-    private AudioController audio;
-
-    // Stats
-    private Stats stats;
-
     // Game timer
     private final int GAME_TIME_SECONDS = 60;
     private final int CLOCK_INTERVAL_MILLISECONDS = 10;
@@ -46,19 +37,24 @@ public class PlayActivity extends AppCompatActivity
     private TextView txtScore;
     private int score;
 
-    // Game modifiers
+    // Word pool currently pulling from
+    private List<String> wordPool;
+    // Modifiers currently active
     private List<Modifier> activeModifiers;
 
-    // Word timer
+    // WordTimer view
     private WordTimerView wordTimerView;
 
-    // Word to type
+    // WordToType view
     private WordToTypeView wordView;
     private TextView nextWord;
     private String lastWord;
 
     // When a word is completed, briefly block game
     private boolean wordCompleted;
+
+    private AudioController audio;
+    private Stats stats;    // Keep track of in-game stats
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +81,7 @@ public class PlayActivity extends AppCompatActivity
 
         // Load Default words
         readWordPool();
+
         startGame();
     }
     @Override protected void onResume() {
@@ -210,7 +207,7 @@ public class PlayActivity extends AppCompatActivity
         }
     }
 
-    // WordToType
+    // WordToType view
     @Override public void rightInput() {
         updateScore(RIGHT_INPUT);
     }
@@ -235,7 +232,7 @@ public class PlayActivity extends AppCompatActivity
         }.start();
     }
 
-    // WordTimer
+    // WordTimer view
     @Override public void timesUp() {
         wordCompleted();
     }
