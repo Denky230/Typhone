@@ -69,7 +69,7 @@ public class PlayActivity extends AppCompatActivity
 
     // When a word is completed, briefly block game
     private boolean wordCompleted;
-    
+
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
