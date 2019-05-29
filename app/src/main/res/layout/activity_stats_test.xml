@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.StatsTestActivity">
+    tools:context=".activities.StatsTestActivity"
+    android:id="@+id/entireView">
 
     <TextView
         android:id="@+id/lblGameStats"
@@ -23,42 +24,42 @@
         app:layout_constraintVertical_bias="0.07999998" />
 
     <LinearLayout
-        android:layout_width="327dp"
-        android:layout_height="496dp"
+        android:id="@+id/linearLayout2"
+        android:layout_width="350dp"
+        android:layout_height="493dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblGrade">
+        app:layout_constraintHorizontal_bias="0.488"
+        app:layout_constraintStart_toStartOf="parent">
 
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="474dp">
+            android:layout_height="409dp">
 
             <TableRow
-                android:layout_width="266dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/textView6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_width="153dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="20dp"
                     android:text="HighScore"
                     android:textAlignment="textEnd" />
 
-                <EditText
-                    android:id="@+id/lblHighscoreStat"
-                    android:layout_width="150dp"
+                <TextView
+                    android:id="@+id/lblHighScoreStat"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:ems="10"
-                    android:inputType="numberDecimal" />
+                    android:text="TextView" />
+
             </TableRow>
 
             <TableRow
@@ -67,41 +68,41 @@
 
                 <TextView
                     android:id="@+id/textView15"
-                    android:layout_width="178dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="20dp"
                     android:text="Score"
                     android:textAlignment="textEnd" />
 
-                <EditText
+                <TextView
                     android:id="@+id/lblScoreStat"
-                    android:layout_width="150dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:ems="10"
-                    android:inputType="numberDecimal" />
+                    android:text="TextView" />
+
             </TableRow>
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="20dp"
                     android:text="Total Inputs"
                     android:textAlignment="textEnd" />
 
-                <EditText
-                    android:id="@+id/lblTotalInputs"
-                    android:layout_width="150dp"
+                <TextView
+                    android:id="@+id/lblTotalInputsStat"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:ems="10"
-                    android:inputType="numberDecimal" />
+                    android:text="TextView" />
+
             </TableRow>
 
             <TableRow
@@ -112,16 +113,26 @@
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="20dp"
                     android:text="Accuracy"
                     android:textAlignment="textEnd" />
 
                 <ProgressBar
-                    android:id="@+id/progressBar"
+                    android:id="@+id/lblAccuracyStat"
                     style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="150dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp" />
+                    android:layout_marginLeft="20dp"
+                    android:maxWidth="55dp"
+                    android:maxHeight="20dp"
+                    android:minWidth="55dp"
+                    android:minHeight="20dp" />
+
+                <TextView
+                    android:id="@+id/lblAccuracyPercentage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
 
             </TableRow>
 
@@ -134,7 +145,7 @@
                     android:id="@+id/textView5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="20dp"
                     android:text="Inputs / Second"
                     android:textAlignment="textEnd" />
 
@@ -148,17 +159,17 @@
                     android:id="@+id/textView7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="20dp"
                     android:text="Max"
                     android:textAlignment="textEnd" />
 
-                <EditText
-                    android:id="@+id/editText5"
-                    android:layout_width="150dp"
+                <TextView
+                    android:id="@+id/lblMaxInputsStat"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:ems="10"
-                    android:inputType="numberDecimal" />
+                    android:text="TextView" />
+
             </TableRow>
 
             <TableRow
@@ -169,17 +180,17 @@
                     android:id="@+id/textView8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="20dp"
                     android:text="AVG"
                     android:textAlignment="textEnd" />
 
-                <EditText
-                    android:id="@+id/editText7"
-                    android:layout_width="150dp"
+                <TextView
+                    android:id="@+id/lblAvgInputsStat"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:ems="10"
-                    android:inputType="numberDecimal" />
+                    android:text="TextView" />
+
             </TableRow>
 
             <TableRow
@@ -191,7 +202,7 @@
                     android:id="@+id/textView9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="20dp"
                     android:text="Highest Streak"
                     android:textAlignment="textEnd" />
             </TableRow>
@@ -204,17 +215,17 @@
                     android:id="@+id/textView10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="20dp"
                     android:text="Word"
                     android:textAlignment="textEnd" />
 
-                <EditText
-                    android:id="@+id/editText8"
-                    android:layout_width="150dp"
+                <TextView
+                    android:id="@+id/lblWordStreakStat"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:ems="10"
-                    android:inputType="numberDecimal" />
+                    android:text="TextView" />
+
             </TableRow>
 
             <TableRow
@@ -225,23 +236,23 @@
                     android:id="@+id/textView11"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="20dp"
                     android:text="Letter"
                     android:textAlignment="textEnd" />
 
-                <EditText
-                    android:id="@+id/editText9"
-                    android:layout_width="150dp"
+                <TextView
+                    android:id="@+id/lblLetterStreakStat"
+                    android:layout_width="121dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:ems="10"
-                    android:inputType="numberDecimal" />
+                    android:text="TextView" />
+
             </TableRow>
         </TableLayout>
     </LinearLayout>
 
     <TextView
-        android:id="@+id/lblGrade"
+        android:id="@+id/lblGradeStat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -249,10 +260,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.22000003" />
+        app:layout_constraintTop_toBottomOf="@+id/lblGameStats" />
 
 </android.support.constraint.ConstraintLayout>

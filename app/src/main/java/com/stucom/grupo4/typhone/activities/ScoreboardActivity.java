@@ -87,7 +87,7 @@ public class ScoreboardActivity extends AppCompatActivity {
         UserViewHolder(View itemView) {
             super(itemView);
             rank = itemView.findViewById(R.id.lblRank);
-            score = itemView.findViewById(R.id.lblScore);
+            score = itemView.findViewById(R.id.lblScoreStat);
             name = itemView.findViewById(R.id.lblUsername);
         }
     }

@@ -21,6 +21,7 @@ public class StatsActivity extends AppCompatActivity {
                 // Send to PlayActivity (start new game)
                 Intent intent = new Intent(StatsActivity.this, PlayActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -31,6 +32,7 @@ public class StatsActivity extends AppCompatActivity {
                 // Send to HomeActivity
                 Intent intent = new Intent(StatsActivity.this, HomeActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

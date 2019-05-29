@@ -25,11 +25,6 @@ public class AudioController {
         Music(int id) { this.id = id; }
     }
 
-    // Game sound effects IDs
-    private final int[] sfx = {
-
-    };
-
     private AudioController() {
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setVolume(1f, 1f);

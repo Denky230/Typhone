@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.stucom.grupo4.typhone.R;
@@ -26,7 +27,7 @@ public class PlayActivity extends AppCompatActivity
         implements WordToTypeView.WordListener, WordTimerView.WordTimerListener {
 
     // Game timer
-    private final int GAME_TIME_SECONDS = 60;
+    private final int GAME_TIME_SECONDS = 20;
     private final int CLOCK_INTERVAL_MILLISECONDS = 10;
     private int lastRemainingMillis;
     private TextView txtGameTimer;
@@ -59,6 +60,9 @@ public class PlayActivity extends AppCompatActivity
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
+        //Keeps screen on
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
 
         // Initialize UI elements
         nextWord = findViewById(R.id.lblNextWord);
@@ -66,7 +70,7 @@ public class PlayActivity extends AppCompatActivity
         wordTimerView.setWordTimerListener(this);
         wordView = findViewById(R.id.wordToTypeView);
         wordView.setWordListener(this);
-        txtScore = findViewById(R.id.lblScore);
+        txtScore = findViewById(R.id.lblScoreStat);
         txtGameTimer = findViewById(R.id.lblGameTimer);
         txtGameTimer.setTranslationY(-25f);
 
@@ -131,10 +135,11 @@ public class PlayActivity extends AppCompatActivity
         stats.setScore(this.score);
 
         // Send to StatsActivity
-        Intent intent = new Intent(PlayActivity.this, StatsActivity.class);
+        Intent intent = new Intent(PlayActivity.this, StatsTestActivity.class);
         // Pass stats object to StatsActivity
         intent.putExtra("stats", stats);
-//        startActivity(intent);
+        startActivity(intent);
+        finish();
     }
     private CountDownTimer startGameTimer(int timerMillis) {
         return new CountDownTimer(timerMillis, CLOCK_INTERVAL_MILLISECONDS) {

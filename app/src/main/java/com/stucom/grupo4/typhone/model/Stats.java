@@ -28,8 +28,9 @@ public class Stats implements Serializable {
         inputsTotal++;
     }
 
-    public int getAccuracy() {
-        return 100 / (inputsTotal / inputsRight);
+    public float getAccuracy() {
+        float division = (float) inputsRight / (float) inputsTotal;
+        return (division * 100);
     }
 
     public float getIpsMax() {

@@ -7,7 +7,7 @@
     tools:context=".activities.PlayActivity">
 
     <TextView
-        android:id="@+id/lblScore"
+        android:id="@+id/lblScoreStat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -31,7 +31,7 @@
         android:paddingBottom="0dp"
         android:textSize="42sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblScore"
+        app:layout_constraintTop_toBottomOf="@+id/lblScoreStat"
         tools:text="Game timer" />
 
     <com.stucom.grupo4.typhone.views.WordTimerView
