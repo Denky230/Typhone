@@ -255,6 +255,9 @@ public class PlayActivity extends AppCompatActivity
     @Override public void wordCompleted() {
         wordCompleted = true;
 
+        // Stop word timer to avoid calling this again
+        wordTimerView.stopTimer();
+
         // Wait a bit before showing next word
         int delayMs = 250;
         new CountDownTimer(delayMs, delayMs) {

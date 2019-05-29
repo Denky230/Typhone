@@ -9,11 +9,9 @@ import android.util.AttributeSet;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import com.stucom.grupo4.typhone.tools.Tools;
-
 public class WordTimerView extends View {
 
-    private final int CLOCK_INTERVAL_MILLISECONDS = 10;     // Timer will tick every... milliseconds
+    private final int TIMER_INTERVAL_MILLISECONDS = 10;     // Timer will tick every... milliseconds
     private int totalMs, msLeft;
 
     private CountDownTimer timer;   // Bar timer
@@ -39,7 +37,7 @@ public class WordTimerView extends View {
         stopTimer();
 
         this.totalMs = this.msLeft = totalMs;
-        timer = new CountDownTimer(totalMs, CLOCK_INTERVAL_MILLISECONDS) {
+        timer = new CountDownTimer(totalMs, TIMER_INTERVAL_MILLISECONDS) {
             @Override
             public void onTick(long millisUntilFinished) {
                 // Update word time left
