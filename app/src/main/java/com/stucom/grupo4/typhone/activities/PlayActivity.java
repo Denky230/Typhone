@@ -11,6 +11,7 @@ import com.stucom.grupo4.typhone.R;
 import com.stucom.grupo4.typhone.control.AudioController;
 import com.stucom.grupo4.typhone.control.GameController;
 import com.stucom.grupo4.typhone.model.Stats;
+import com.stucom.grupo4.typhone.model.modifiers.WordModifier;
 import com.stucom.grupo4.typhone.tools.Tools;
 import com.stucom.grupo4.typhone.views.WordTimerView;
 import com.stucom.grupo4.typhone.views.WordToTypeView;
@@ -39,8 +40,8 @@ public class PlayActivity extends AppCompatActivity
     private int nextEventStateSeconds;
 
     // Game timer
-    private final int GAME_TIME_SECONDS = 10;
-    private final int CLOCK_INTERVAL_MILLISECONDS = 1000;
+    private final int GAME_TIME_SECONDS = 60;
+    private final int TIMER_INTERVAL_MILLISECONDS = 1000;
     private int lastRemainingMs;
     private TextView txtGameTimer;
     private CountDownTimer timer;
@@ -49,6 +50,9 @@ public class PlayActivity extends AppCompatActivity
     private final int RIGHT_INPUT = 10;
     private TextView txtScore;
     private int score;
+
+    // In-game stats
+    private Stats stats;
 
     // Word pool currently pulling from
     private List<String> wordPool;
@@ -64,8 +68,8 @@ public class PlayActivity extends AppCompatActivity
     // When a word is completed, briefly block game
     private boolean wordCompleted;
 
+    private GameController controller;
     private AudioController audio;
-    private Stats stats;    // Keep track of in-game stats
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +85,7 @@ public class PlayActivity extends AppCompatActivity
         txtGameTimer = findViewById(R.id.lblGameTimer);
         txtGameTimer.setTranslationY(-25f);
 
+        controller = GameController.getInstance();
         audio = AudioController.getInstance();
         wordPool = new ArrayList<>();
         stats = new Stats();
@@ -154,15 +159,18 @@ public class PlayActivity extends AppCompatActivity
 //        startActivity(intent);
     }
     private void startGameTimer(int totalMs) {
-        timer = new CountDownTimer(totalMs, CLOCK_INTERVAL_MILLISECONDS) {
+        timer = new CountDownTimer(totalMs, TIMER_INTERVAL_MILLISECONDS) {
             @Override
             public void onTick(long millisUntilFinished) {
                 // Update game time left
                 int secsLeft = (int) millisUntilFinished / 1000;
                 setGameTime(secsLeft);
 
-                // Check game time
+                // Check elapsed game time
                 int gameTimeSecs = GAME_TIME_SECONDS - secsLeft;
+                if (gameTimeSecs >= nextEventStateSeconds) {
+                    nextEventState();
+                }
             }
 
             @Override
@@ -182,19 +190,32 @@ public class PlayActivity extends AppCompatActivity
         this.eventState = eventState;
         this.nextEventStateSeconds += eventState.seconds;
         switch (eventState) {
-
-            case EVENT_DOWNTIME:
-                break;
-
-            case EVENT_ANNOUNCEMENT:
-                break;
-
-            case EVENT_ACTIVE:
-                break;
-
-            case MODIFIER_ACTIVE:
-                break;
+            case EVENT_DOWNTIME: setEventDowntime(); break;
+            case EVENT_ANNOUNCEMENT: setEventAnnouncement(); break;
+            case EVENT_ACTIVE: setEventActive(); break;
+            case MODIFIER_ACTIVE: setModifierActive(); break;
         }
+    }
+    private void setEventDowntime() {
+        // Cancel active modifiers
+        controller.clearModifiers();
+    }
+    private void setEventAnnouncement() {
+        // Get game modifiers pool
+        WordModifier[] modifiers = controller.getWordModifiers();
+
+        // Pull random game modifier
+        int rand = (int) (Math.random() * modifiers.length);
+        WordModifier randomModifier = modifiers[rand];
+
+        // Announce pulled modifier
+        Tools.toast(this, randomModifier.getClass().getSimpleName());
+    }
+    private void setEventActive() {
+
+    }
+    private void setModifierActive() {
+
     }
 
     /**
