@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.stucom.grupo4.typhone.R;
@@ -66,12 +67,16 @@ public class PlayActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
+        //Keeps screen on
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         // Initialize UI elements
         nextWord = findViewById(R.id.lblNextWord);
         wordTimerView = findViewById(R.id.wordTimerView);
         wordTimerView.setWordTimerListener(this);
         wordView = findViewById(R.id.wordToTypeView);
         wordView.setWordListener(this);
+        txtScore = findViewById(R.id.lblScoreStat);
         eventView = findViewById(R.id.eventView);
         txtScore = findViewById(R.id.lblScore);
         txtGameTimer = findViewById(R.id.lblGameTimer);
@@ -142,10 +147,11 @@ public class PlayActivity extends AppCompatActivity
         stats.setScore(this.score);
 
         // Send to StatsActivity
-        Intent intent = new Intent(PlayActivity.this, StatsActivity.class);
+        Intent intent = new Intent(PlayActivity.this, StatsTestActivity.class);
         // Pass stats object to StatsActivity
         intent.putExtra("stats", stats);
-//        startActivity(intent);
+        startActivity(intent);
+        finish();
     }
     private void startGameTimer(int totalMs) {
         timer = new CountDownTimer(totalMs, TIMER_INTERVAL_MILLISECONDS) {
