@@ -8,7 +8,11 @@ import com.stucom.grupo4.typhone.model.Word;
 
 import java.util.Calendar;
 
-public class BlinkingWords implements WordModifier {
+public class BlinkingWords extends WordModifier {
+
+    public BlinkingWords(int iconResID) {
+        super(iconResID);
+    }
 
     @Override public void modifyWord(Word word, Paint paint, View view) {
 

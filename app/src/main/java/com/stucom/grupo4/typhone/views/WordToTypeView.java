@@ -14,6 +14,7 @@ import com.stucom.grupo4.typhone.constants.Style;
 import com.stucom.grupo4.typhone.control.GameController;
 import com.stucom.grupo4.typhone.model.Letter;
 import com.stucom.grupo4.typhone.model.Word;
+import com.stucom.grupo4.typhone.model.modifiers.Modifier;
 import com.stucom.grupo4.typhone.model.modifiers.WordModifier;
 
 public class WordToTypeView extends View {
@@ -222,8 +223,11 @@ public class WordToTypeView extends View {
         }
 
         // Apply word modifiers here
-        for (WordModifier wordModifier : gameController.getActiveWordModifiers()) {
-            wordModifier.modifyWord(word, paint, this);
+        for (Modifier modifier : gameController.getActiveModifiers()) {
+            if (modifier instanceof WordModifier) {
+                WordModifier wordModifier = (WordModifier) modifier;
+                wordModifier.modifyWord(word, paint, this);
+            }
         }
 
         // Conform canvas scale.x to word scale.x
