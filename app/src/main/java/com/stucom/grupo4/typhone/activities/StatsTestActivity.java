@@ -73,6 +73,8 @@ public class StatsTestActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(StatsTestActivity.this, StatsActivity.class);
                     startActivity(intent);
+                    //Fade this activity and
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     finish();
 
                     return true;
