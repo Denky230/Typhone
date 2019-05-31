@@ -227,7 +227,7 @@ public class PlayActivity extends AppCompatActivity
     private void setModifierActive() {
 
     }
-    
+
     private void showImagesDependingOfEvent(Modifier modifier){
         //image.setImageResource(R.drawable.medical_modifier);
     }
