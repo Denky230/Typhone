@@ -67,7 +67,7 @@ public class PlayActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
-        //Keeps screen on
+        // Keeps screen on
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // Initialize UI elements
@@ -78,7 +78,7 @@ public class PlayActivity extends AppCompatActivity
         wordView.setWordListener(this);
         txtScore = findViewById(R.id.lblScoreStat);
         eventView = findViewById(R.id.eventView);
-        txtScore = findViewById(R.id.lblScore);
+        txtScore = findViewById(R.id.lblScoreStat);
         txtGameTimer = findViewById(R.id.lblGameTimer);
         txtGameTimer.setTranslationY(-25f);
 
