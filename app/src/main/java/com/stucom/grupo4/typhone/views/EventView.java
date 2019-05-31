@@ -1,7 +1,12 @@
 package com.stucom.grupo4.typhone.views;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -17,9 +22,9 @@ public class EventView extends View {
 
     // Event states
     public enum EventState {
-        EVENT_DOWNTIME(2),
+        EVENT_DOWNTIME(4),
         EVENT_ANNOUNCEMENT(3),
-        EVENT_ACTIVE(5),
+        EVENT_ACTIVE(3),
         MODIFIER_ACTIVE(10);
 
         int seconds;    // state duration
@@ -32,6 +37,8 @@ public class EventView extends View {
 
     private GameController controller;
 
+    private Rect rect;
+
     public EventView(Context context) {
         this(context, null, 0);
     }
@@ -41,9 +48,12 @@ public class EventView extends View {
     public EventView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        this.eventModifiers = new ArrayList<>();
-        this.controller = GameController.getInstance();
-        this.eventState = EventState.values()[0];
+        eventModifiers = new ArrayList<>();
+        controller = GameController.getInstance();
+        setEventState(EventState.values()[0]);
+
+        final int size = 200;
+        rect = new Rect(0, 0, size, size);
     }
 
     // Event states
@@ -61,6 +71,8 @@ public class EventView extends View {
             case EVENT_ACTIVE: setEventActive(); break;
             case MODIFIER_ACTIVE: setModifierActive(); break;
         }
+
+        Tools.log(eventState.name());
     }
 
     private void setEventDowntime() {
@@ -87,8 +99,6 @@ public class EventView extends View {
     private void setEventActive() {
         // Announce event starting
         this.invalidate();
-
-        Tools.log("event start");
     }
     private void setModifierActive() {
         // Add event modifiers to game active modifiers
@@ -97,11 +107,22 @@ public class EventView extends View {
         }
         // Clear event modifiers
         eventModifiers.clear();
-
-        Tools.log("mods active");
+        // Clear event view
+        this.invalidate();
     }
 
     @Override protected void onDraw(Canvas canvas) {
 
+        // Avoid onDraw when there's no event going on
+        // since there is nothing to draw
+        if (eventModifiers.isEmpty()) return;
+
+        // Get icon to draw
+        Bitmap b = BitmapFactory.decodeResource(getResources(), eventModifiers.get(0).getIconResID());
+        if (b == null) return;
+
+        // Draw event modifier icon
+        canvas.translate(getWidth() / 2 - rect.width() / 2, getHeight() / 2 - rect.height() / 2);
+        canvas.drawBitmap(b,null, rect,null);
     }
 }

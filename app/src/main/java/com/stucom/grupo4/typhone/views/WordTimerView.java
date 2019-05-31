@@ -64,6 +64,7 @@ public class WordTimerView extends View {
     }
 
     @Override protected void onDraw(Canvas canvas) {
+
         // Draw border
         paint.setColor(Color.BLACK);
         canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
@@ -71,7 +72,7 @@ public class WordTimerView extends View {
         // Draw bar
         paint.setColor(Color.RED);
         canvas.scale((float) getWidth() / totalMs, 1);
-        canvas.drawRect(20, 5, msLeft, getHeight() - 5, paint);
+        canvas.drawRect(20, 5, msLeft + 20, getHeight() - 5, paint);
     }
 
     public interface WordTimerListener {
