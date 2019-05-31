@@ -34,6 +34,18 @@
         app:layout_constraintTop_toBottomOf="@+id/lblScoreStat"
         tools:text="Game timer" />
 
+    <ImageView
+        android:id="@+id/modifier_image"
+        android:layout_width="102dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/lblNextWord"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.737" />
+
     <com.stucom.grupo4.typhone.views.WordTimerView
         android:id="@+id/wordTimerView"
         android:layout_width="0dp"
