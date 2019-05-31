@@ -8,7 +8,6 @@ import android.view.View;
 
 import com.stucom.grupo4.typhone.control.GameController;
 import com.stucom.grupo4.typhone.model.modifiers.Modifier;
-import com.stucom.grupo4.typhone.model.modifiers.WordModifier;
 import com.stucom.grupo4.typhone.tools.Tools;
 
 import java.util.ArrayList;
@@ -18,10 +17,10 @@ public class EventView extends View {
 
     // Event states
     public enum EventState {
-        EVENT_DOWNTIME(5),
-        EVENT_ANNOUNCEMENT(5),
+        EVENT_DOWNTIME(2),
+        EVENT_ANNOUNCEMENT(3),
         EVENT_ACTIVE(5),
-        MODIFIER_ACTIVE(5);
+        MODIFIER_ACTIVE(10);
 
         int seconds;    // state duration
         EventState(int seconds) { this.seconds = seconds; }

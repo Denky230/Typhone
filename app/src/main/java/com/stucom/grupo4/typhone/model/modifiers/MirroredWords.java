@@ -23,5 +23,8 @@ public class MirroredWords extends WordModifier {
             float width = paint.measureText(String.valueOf(letter.getCharacter()));
             letter.setX(letter.getX() + width);
         }
+
+        // Request canvas redraw
+        view.invalidate();
     }
 }

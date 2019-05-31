@@ -31,7 +31,6 @@ public class StatsTestActivity extends AppCompatActivity {
         grade.setTextSize(100);
         grade.setText(getGradeByScore());
 
-
         highScore = findViewById(R.id.lblHighScoreStat);
 
         score = findViewById(R.id.lblScoreStat);
@@ -49,7 +48,7 @@ public class StatsTestActivity extends AppCompatActivity {
         }
 
         accuracyPercentage = findViewById(R.id.lblAccuracyPercentage);
-        accuracyPercentage.setText(stats.getAccuracy() + "%");
+        accuracyPercentage.setText( (Float.isNaN(stats.getAccuracy()) ? 0 : stats.getAccuracy()) + "%");
 
         //TODO still needs max & avg inputs and word & letter streak
 

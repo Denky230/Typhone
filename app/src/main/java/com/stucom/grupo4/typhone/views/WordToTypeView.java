@@ -39,6 +39,9 @@ public class WordToTypeView extends View {
 
         // Initialize text paints
         paint = new TextPaint();
+    }
+
+    private void initPaint() {
         paint.setTextSize(Style.FONT_SIZE);
         paint.setAntiAlias(true);
         paint.setColor(Color.BLACK);
@@ -160,6 +163,9 @@ public class WordToTypeView extends View {
 
         // Save word currently displayed
         String sWord = word.getWord();
+
+        // Set up paint attributes
+        initPaint();
 
         // Center word's Y
         float y = getMinimumHeight()

@@ -11,7 +11,7 @@ import java.util.Set;
 public class GameController {
 
     // Word timer
-    public static int LETTER_TIME_MILLISECONDS = 350;
+    public static int LETTER_TIME_MILLISECONDS = 250;
 
     // Modifiers
     private WordModifier[] modifiers;           // game modifiers
