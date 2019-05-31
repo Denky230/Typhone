@@ -16,6 +16,7 @@ import com.stucom.grupo4.typhone.model.Stats;
 import com.stucom.grupo4.typhone.model.modifiers.Modifier;
 import com.stucom.grupo4.typhone.model.modifiers.WordModifier;
 import com.stucom.grupo4.typhone.tools.Tools;
+import com.stucom.grupo4.typhone.views.EventView;
 import com.stucom.grupo4.typhone.views.WordTimerView;
 import com.stucom.grupo4.typhone.views.WordToTypeView;
 
@@ -29,21 +30,8 @@ import java.util.Locale;
 public class PlayActivity extends AppCompatActivity
         implements WordToTypeView.WordListener, WordTimerView.WordTimerListener {
 
-    // Event states
-    public enum EventState {
-        EVENT_DOWNTIME(5),
-        EVENT_ANNOUNCEMENT(5),
-        EVENT_ACTIVE(5),
-        MODIFIER_ACTIVE(5);
-
-        int seconds;    // state duration
-        EventState(int seconds) { this.seconds = seconds; }
-    }
-    private EventState eventState;
-    private int nextEventStateSeconds;
-
     // Game timer
-    private final int GAME_TIME_SECONDS = 20;
+    private final int GAME_TIME_SECONDS = 60;
     private final int TIMER_INTERVAL_MILLISECONDS = 1000;
     private int lastRemainingMs;
     private TextView txtGameTimer;
@@ -71,6 +59,9 @@ public class PlayActivity extends AppCompatActivity
     private TextView nextWord;
     private String lastWord;
 
+    // Event view
+    private EventView eventView;
+
     // When a word is completed, briefly block game
     private boolean wordCompleted;
 
@@ -80,9 +71,9 @@ public class PlayActivity extends AppCompatActivity
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
-        //Keeps screen on
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        // Keeps screen on
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // Initialize UI elements
         nextWord = findViewById(R.id.lblNextWord);
@@ -90,6 +81,8 @@ public class PlayActivity extends AppCompatActivity
         wordTimerView.setWordTimerListener(this);
         wordView = findViewById(R.id.wordToTypeView);
         wordView.setWordListener(this);
+        txtScore = findViewById(R.id.lblScoreStat);
+        eventView = findViewById(R.id.eventView);
         txtScore = findViewById(R.id.lblScoreStat);
         txtGameTimer = findViewById(R.id.lblGameTimer);
         txtGameTimer.setTranslationY(-25f);
@@ -150,9 +143,6 @@ public class PlayActivity extends AppCompatActivity
         setScore(0);
         lastWord = "";
 
-        // Set starting event state
-        setEventState(EventState.values()[0]);
-
         // Get first word
         nextWord.setText(pullWordFromWordPool());
         updateWordToType();
@@ -178,8 +168,8 @@ public class PlayActivity extends AppCompatActivity
 
                 // Check elapsed game time
                 int gameTimeSecs = GAME_TIME_SECONDS - secsLeft;
-                if (gameTimeSecs >= nextEventStateSeconds) {
-                    nextEventState();
+                if (gameTimeSecs >= eventView.nextEventStateSeconds) {
+                    eventView.nextEventState();;
                 }
             }
 
@@ -188,48 +178,6 @@ public class PlayActivity extends AppCompatActivity
                 gameOver();
             }
         }.start();
-    }
-
-    // Event states
-    public void nextEventState() {
-        int currStateOrdinal = this.eventState.ordinal();
-        int nextStateOrdinal = ++currStateOrdinal == EventState.values().length ? 0 : currStateOrdinal;
-        setEventState(EventState.values()[nextStateOrdinal]);
-    }
-    public void setEventState(EventState eventState) {
-        this.eventState = eventState;
-        this.nextEventStateSeconds += eventState.seconds;
-        switch (eventState) {
-            case EVENT_DOWNTIME: setEventDowntime(); break;
-            case EVENT_ANNOUNCEMENT: setEventAnnouncement(); break;
-            case EVENT_ACTIVE: setEventActive(); break;
-            case MODIFIER_ACTIVE: setModifierActive(); break;
-        }
-    }
-    private void setEventDowntime() {
-        // Cancel active modifiers
-        controller.clearModifiers();
-    }
-    private void setEventAnnouncement() {
-        // Get game modifiers pool
-        WordModifier[] modifiers = controller.getWordModifiers();
-
-        // Pull random game modifier
-        int rand = (int) (Math.random() * modifiers.length);
-        WordModifier randomModifier = modifiers[rand];
-
-        // Announce pulled modifier
-        Tools.toast(this, randomModifier.getClass().getSimpleName());
-    }
-    private void setEventActive() {
-
-    }
-    private void setModifierActive() {
-
-    }
-
-    private void showImagesDependingOfEvent(Modifier modifier){
-        //image.setImageResource(R.drawable.medical_modifier);
     }
 
     /**

@@ -5,7 +5,11 @@ import android.view.View;
 
 import com.stucom.grupo4.typhone.model.Word;
 
-public interface WordModifier {
+public abstract class WordModifier extends Modifier {
 
-    void modifyWord(Word word, Paint paint, View view);
+    public WordModifier(int iconResID) {
+        super(iconResID);
+    }
+
+    public abstract void modifyWord(Word word, Paint paint, View view);
 }

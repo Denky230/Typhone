@@ -2,9 +2,9 @@ package com.stucom.grupo4.typhone.control;
 
 import com.stucom.grupo4.typhone.model.modifiers.BlinkingWords;
 import com.stucom.grupo4.typhone.model.modifiers.MirroredWords;
+import com.stucom.grupo4.typhone.model.modifiers.Modifier;
 import com.stucom.grupo4.typhone.model.modifiers.WordModifier;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,11 +14,11 @@ public class GameController {
     public static int LETTER_TIME_MILLISECONDS = 350;
 
     // Modifiers
-    private WordModifier[] wordModifiers;           // game modifiers
-    private Set<WordModifier> activeWordModifiers;  // currently active
+    private WordModifier[] modifiers;           // game modifiers
+    private Set<Modifier> activeModifiers;      // currently active
 
     private GameController() {
-        this.activeWordModifiers = new HashSet<>();
+        this.activeModifiers = new HashSet<>();
         initWordModifiers();
     }
     private static GameController instance;
@@ -29,23 +29,23 @@ public class GameController {
     }
 
     private void initWordModifiers() {
-        this.wordModifiers = new WordModifier[] {
-                new MirroredWords(),
-                new BlinkingWords()
+        this.modifiers = new WordModifier[] {
+                new MirroredWords(0),
+                new BlinkingWords(0)
         };
     }
 
-    public WordModifier[] getWordModifiers() {
-        return this.wordModifiers;
+    public Modifier[] getModifiers() {
+        return this.modifiers;
     }
 
-    public Set<WordModifier> getActiveWordModifiers() {
-        return this.activeWordModifiers;
+    public Set<Modifier> getActiveModifiers() {
+        return this.activeModifiers;
     }
-    public void addModifier(WordModifier wordModifier) {
-        activeWordModifiers.add(wordModifier);
+    public void addModifier(Modifier modifier) {
+        activeModifiers.add(modifier);
     }
     public void clearModifiers() {
-        this.activeWordModifiers.clear();
+        this.activeModifiers.clear();
     }
 }

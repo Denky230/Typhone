@@ -13,7 +13,6 @@ public class AudioController {
     private final SoundPool soundPool;      // Sound pool for sound effects
 
     private boolean musicMuted, sfxMuted;
-    private float currMusicVolume;
     private int currentMusicResID;          // Store track currently played
 
     // Game music enum
@@ -26,9 +25,9 @@ public class AudioController {
     }
 
     private AudioController() {
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setVolume(1f, 1f);
-        soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+        this.mediaPlayer = new MediaPlayer();
+        this.mediaPlayer.setVolume(1f, 1f);
+        this.soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
     }
     private static AudioController instance;
     public static AudioController getInstance() {
@@ -46,6 +45,13 @@ public class AudioController {
         // Set new track
         setMusicTrack(context, music, loop);
     }
+    private void setMusicTrack(Context context, Music music, boolean loop) {
+        final int musicResID = music.id;
+        mediaPlayer = MediaPlayer.create(context, musicResID);
+        mediaPlayer.setLooping(loop);
+        currentMusicResID = musicResID;
+    }
+
     public void startMusic() {
         if (!musicMuted && !mediaPlayer.isPlaying()) {
             mediaPlayer.start();
@@ -63,29 +69,6 @@ public class AudioController {
         }
     }
 
-    public void fadeIn() {
-        // Raise current music volume
-        final float increase = .001f;
-        setMusicVolume(currMusicVolume + increase);
-
-        // Recursive call
-        if (currMusicVolume < 1f) {
-            fadeIn();
-        }
-    }
-    public void fadeOut() {
-        // Lower current music volume
-        final float decrease = .001f;
-        setMusicVolume(currMusicVolume - decrease);
-
-        // Recursive call
-        if (currMusicVolume > 0) {
-            fadeOut();
-        } else {
-            stopMusic();
-        }
-    }
-
     public boolean isMusicMuted() {
         return this.musicMuted;
     }
@@ -100,24 +83,5 @@ public class AudioController {
     }
     public void muteSfx(boolean muted) {
         this.sfxMuted = muted;
-    }
-
-    private void setMusicVolume(float volume) {
-        if (volume > 1) {
-            volume = 1;
-        } else if (volume < 0) {
-            volume = 0;
-        }
-
-//        Tools.log(String.valueOf(volume));
-
-        this.currMusicVolume = volume;
-        this.mediaPlayer.setVolume(volume, volume);
-    }
-    private void setMusicTrack(Context context, Music music, boolean loop) {
-        final int musicResID = music.id;
-        mediaPlayer = MediaPlayer.create(context, musicResID);
-        mediaPlayer.setLooping(loop);
-        currentMusicResID = musicResID;
     }
 }
