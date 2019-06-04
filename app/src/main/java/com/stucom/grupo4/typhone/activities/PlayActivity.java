@@ -6,12 +6,14 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.stucom.grupo4.typhone.R;
 import com.stucom.grupo4.typhone.control.AudioController;
 import com.stucom.grupo4.typhone.control.GameController;
 import com.stucom.grupo4.typhone.model.Stats;
+import com.stucom.grupo4.typhone.model.modifiers.Modifier;
 import com.stucom.grupo4.typhone.model.modifiers.WordModifier;
 import com.stucom.grupo4.typhone.tools.Tools;
 import com.stucom.grupo4.typhone.views.EventView;
@@ -40,6 +42,9 @@ public class PlayActivity extends AppCompatActivity
     private TextView txtScore;
     private int score;
 
+    // Modifier's images
+    private ImageView image;
+
     // In-game stats
     private Stats stats;
 
@@ -60,7 +65,6 @@ public class PlayActivity extends AppCompatActivity
     // When a word is completed, briefly block game
     private boolean wordCompleted;
 
-    private GameController controller;
     private AudioController audio;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +86,6 @@ public class PlayActivity extends AppCompatActivity
         txtGameTimer = findViewById(R.id.lblGameTimer);
         txtGameTimer.setTranslationY(-25f);
 
-        controller = GameController.getInstance();
         audio = AudioController.getInstance();
         wordPool = new ArrayList<>();
         stats = new Stats();
@@ -146,9 +149,9 @@ public class PlayActivity extends AppCompatActivity
         // Set game score to game stats
         stats.setScore(this.score);
 
-        // Send to StatsActivity
+        // Send to FinalActivity
         Intent intent = new Intent(PlayActivity.this, StatsTestActivity.class);
-        // Pass stats object to StatsActivity
+        // Pass stats object to FinalActivity
         intent.putExtra("stats", stats);
         startActivity(intent);
         finish();
@@ -163,6 +166,7 @@ public class PlayActivity extends AppCompatActivity
 
                 // Check elapsed game time
                 int gameTimeSecs = GAME_TIME_SECONDS - secsLeft;
+                Tools.log(String.valueOf(gameTimeSecs));
                 if (gameTimeSecs >= eventView.nextEventStateSeconds) {
                     eventView.nextEventState();;
                 }

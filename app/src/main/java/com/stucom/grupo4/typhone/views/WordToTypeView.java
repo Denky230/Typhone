@@ -39,6 +39,9 @@ public class WordToTypeView extends View {
 
         // Initialize text paints
         paint = new TextPaint();
+    }
+
+    private void initPaint() {
         paint.setTextSize(Style.FONT_SIZE);
         paint.setAntiAlias(true);
         paint.setColor(Color.BLACK);
@@ -161,6 +164,9 @@ public class WordToTypeView extends View {
         // Save word currently displayed
         String sWord = word.getWord();
 
+        // Set up paint attributes
+        initPaint();
+
         // Center word's Y
         float y = getMinimumHeight()
                 + (float) Style.FONT_SIZE / 2 + (float) getHeight() / 2;
@@ -222,7 +228,7 @@ public class WordToTypeView extends View {
             word.getLetterAt(i).setX(x);
         }
 
-        // Apply word modifiers here
+        // Apply word modifiers
         for (Modifier modifier : gameController.getActiveModifiers()) {
             if (modifier instanceof WordModifier) {
                 WordModifier wordModifier = (WordModifier) modifier;

@@ -31,7 +31,6 @@ public class StatsTestActivity extends AppCompatActivity {
         grade.setTextSize(100);
         grade.setText(getGradeByScore());
 
-
         highScore = findViewById(R.id.lblHighScoreStat);
 
         score = findViewById(R.id.lblScoreStat);
@@ -49,7 +48,7 @@ public class StatsTestActivity extends AppCompatActivity {
         }
 
         accuracyPercentage = findViewById(R.id.lblAccuracyPercentage);
-        accuracyPercentage.setText(stats.getAccuracy() + "%");
+        accuracyPercentage.setText( (Float.isNaN(stats.getAccuracy()) ? 0 : stats.getAccuracy()) + "%");
 
         //TODO still needs max & avg inputs and word & letter streak
 
@@ -72,8 +71,10 @@ public class StatsTestActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
 
-                    Intent intent = new Intent(StatsTestActivity.this, StatsActivity.class);
+                    Intent intent = new Intent(StatsTestActivity.this, FinalActivity.class);
                     startActivity(intent);
+                    //Fade this activity and
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     finish();
 
                     return true;

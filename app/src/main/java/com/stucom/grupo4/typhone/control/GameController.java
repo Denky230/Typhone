@@ -1,5 +1,6 @@
 package com.stucom.grupo4.typhone.control;
 
+import com.stucom.grupo4.typhone.R;
 import com.stucom.grupo4.typhone.model.modifiers.BlinkingWords;
 import com.stucom.grupo4.typhone.model.modifiers.MirroredWords;
 import com.stucom.grupo4.typhone.model.modifiers.Modifier;
@@ -11,7 +12,7 @@ import java.util.Set;
 public class GameController {
 
     // Word timer
-    public static int LETTER_TIME_MILLISECONDS = 350;
+    public static int LETTER_TIME_MILLISECONDS = 250;
 
     // Modifiers
     private WordModifier[] modifiers;           // game modifiers
@@ -30,8 +31,8 @@ public class GameController {
 
     private void initWordModifiers() {
         this.modifiers = new WordModifier[] {
-                new MirroredWords(0),
-                new BlinkingWords(0)
+                new MirroredWords(R.drawable.mirrored_words),
+                new BlinkingWords(R.drawable.blinking_words)
         };
     }
 
