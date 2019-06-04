@@ -31,8 +31,8 @@ public class GameController {
 
     private void initWordModifiers() {
         this.modifiers = new WordModifier[] {
-                new MirroredWords(R.drawable.mirrored_words),
-                new BlinkingWords(R.drawable.blinking_words)
+                new MirroredWords(R.drawable.settings),
+                new BlinkingWords(R.drawable.settings)
         };
     }
 

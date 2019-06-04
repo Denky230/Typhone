@@ -22,13 +22,16 @@ public class EventView extends View {
 
     // Event states
     public enum EventState {
-        EVENT_DOWNTIME(4),
-        EVENT_ANNOUNCEMENT(3),
-        EVENT_ACTIVE(3),
-        MODIFIER_ACTIVE(10);
+        EVENT_DOWNTIME(3, ""),
+        EVENT_ANNOUNCEMENT(3, "Modifier active soon!"),
+        MODIFIER_ACTIVE(14, "");
 
-        int seconds;    // state duration
-        EventState(int seconds) { this.seconds = seconds; }
+        int seconds;        // state duration
+        String message;     // user feedback
+        EventState(int seconds, String message) {
+            this.seconds = seconds;
+            this.message = message;
+        }
     }
     private EventState eventState;
     public int nextEventStateSeconds;
@@ -37,6 +40,8 @@ public class EventView extends View {
 
     private GameController controller;
 
+    // Drawing
+    private Paint paint;
     private Rect rect;
 
     public EventView(Context context) {
@@ -54,6 +59,11 @@ public class EventView extends View {
 
         final int size = 200;
         rect = new Rect(0, 0, size, size);
+
+        paint = new Paint();
+        paint.setTextSize(60);
+        paint.setColor(Color.BLACK);
+        paint.setStyle(Paint.Style.FILL);
     }
 
     // Event states
@@ -68,7 +78,6 @@ public class EventView extends View {
         switch (eventState) {
             case EVENT_DOWNTIME: setEventDowntime(); break;
             case EVENT_ANNOUNCEMENT: setEventAnnouncement(); break;
-            case EVENT_ACTIVE: setEventActive(); break;
             case MODIFIER_ACTIVE: setModifierActive(); break;
         }
 
@@ -78,8 +87,10 @@ public class EventView extends View {
     private void setEventDowntime() {
         // Cancel active modifiers
         controller.clearModifiers();
-
-        Tools.log("mods cleared");
+        // Clear event modifiers
+        eventModifiers.clear();
+        // Clear event view
+        this.invalidate();
     }
     private void setEventAnnouncement() {
         // Get game modifiers pool
@@ -91,13 +102,7 @@ public class EventView extends View {
         // Add modifier to event modifiers
         eventModifiers.add(randomModifier);
 
-        // Announce pulled modifier
-        this.invalidate();
-
-        Tools.log("mod pulled: " + randomModifier.getClass().getSimpleName());
-    }
-    private void setEventActive() {
-        // Announce event starting
+        // Announce modifier soon
         this.invalidate();
     }
     private void setModifierActive() {
@@ -105,17 +110,18 @@ public class EventView extends View {
         for (Modifier modifier : eventModifiers) {
             controller.addModifier(modifier);
         }
-        // Clear event modifiers
-        eventModifiers.clear();
-        // Clear event view
+        // Announce pulled modifier
         this.invalidate();
     }
 
     @Override protected void onDraw(Canvas canvas) {
 
-        // Avoid onDraw when there's no event going on
-        // since there is nothing to draw
-        if (eventModifiers.isEmpty()) return;
+        // Draw event message
+        float w = paint.measureText(eventState.message);
+        canvas.drawText(eventState.message, getWidth() / 2 - w / 2, getHeight() * 0.5f, paint);
+
+        // Avoid onDraw when there's no modifier going on
+        if (eventState != EventState.MODIFIER_ACTIVE) return;
 
         // Get icon to draw
         Bitmap b = BitmapFactory.decodeResource(getResources(), eventModifiers.get(0).getIconResID());

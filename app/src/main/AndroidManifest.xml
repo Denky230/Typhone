@@ -23,29 +23,29 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activities.PlayActivity"
             android:inputType="textNoSuggestions|textFilter|textVisiblePassword"
             android:windowSoftInputMode="stateAlwaysVisible|adjustNothing"
             android:theme="@style/AppTheme.FullscreenPortrait" />
+
         <activity
             android:name=".activities.ScoreboardActivity"
             android:theme="@style/AppTheme.FullscreenPortrait" />
+
         <activity
             android:name=".activities.SettingsActivity"
             android:theme="@style/AppTheme.FullscreenPortrait" />
+
         <activity
-            android:name=".activities.LoginActivity"
+            android:name=".activities.StatsActivity"
             android:theme="@style/AppTheme.FullscreenPortrait" />
-        <activity
-            android:name=".activities.RegisterActivity"
-            android:theme="@style/AppTheme.FullscreenPortrait" />
-        <activity
-            android:name=".activities.StatsTestActivity"
-            android:theme="@style/AppTheme.FullscreenPortrait" />
+
         <activity
             android:name=".activities.FinalActivity"
             android:theme="@style/AppTheme.FullscreenPortrait" />
+
     </application>
 
 </manifest>

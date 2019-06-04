@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -12,23 +11,22 @@ import android.widget.TextView;
 import com.stucom.grupo4.typhone.R;
 import com.stucom.grupo4.typhone.model.Stats;
 
-public class StatsTestActivity extends AppCompatActivity {
+public class StatsActivity extends AppCompatActivity {
 
     private TextView grade, highScore, score, totalInputs, maxInputs, avgInputs, wordStreak, letterStreak, accuracyPercentage;
     private ProgressBar accuracy;
-    private View fullActivity;
     private Stats stats;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_stats_test);
+        setContentView(R.layout.activity_stats);
 
         // Retrieve stats object
         stats = (Stats) getIntent().getSerializableExtra("stats");
 
         grade = findViewById(R.id.lblGradeStat);
-        grade.setTextSize(100);
+        grade.setTextSize(80);
         grade.setText(getGradeByScore());
 
         highScore = findViewById(R.id.lblHighScoreStat);
@@ -58,7 +56,6 @@ public class StatsTestActivity extends AppCompatActivity {
         avgInputs = findViewById(R.id.lblAvgInputsStat);
         avgInputs.setText(String.valueOf(stats.getIpsAvg()));
 
-
         wordStreak = findViewById(R.id.lblWordStreakStat);
         wordStreak.setText(String.valueOf(stats.getHiStreakWord()));
 
@@ -71,7 +68,7 @@ public class StatsTestActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
 
-                    Intent intent = new Intent(StatsTestActivity.this, FinalActivity.class);
+                    Intent intent = new Intent(StatsActivity.this, FinalActivity.class);
                     startActivity(intent);
                     //Fade this activity and
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -88,7 +85,7 @@ public class StatsTestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Send to PlayActivity (start new game)
-                Intent intent = new Intent(StatsTestActivity.this, PlayActivity.class);
+                Intent intent = new Intent(StatsActivity.this, PlayActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -99,7 +96,7 @@ public class StatsTestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Send to HomeActivity
-                Intent intent = new Intent(StatsTestActivity.this, HomeActivity.class);
+                Intent intent = new Intent(StatsActivity.this, HomeActivity.class);
                 startActivity(intent);
                 finish();
             }

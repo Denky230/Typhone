@@ -13,8 +13,6 @@ import com.stucom.grupo4.typhone.R;
 import com.stucom.grupo4.typhone.control.AudioController;
 import com.stucom.grupo4.typhone.control.GameController;
 import com.stucom.grupo4.typhone.model.Stats;
-import com.stucom.grupo4.typhone.model.modifiers.Modifier;
-import com.stucom.grupo4.typhone.model.modifiers.WordModifier;
 import com.stucom.grupo4.typhone.tools.Tools;
 import com.stucom.grupo4.typhone.views.EventView;
 import com.stucom.grupo4.typhone.views.WordTimerView;
@@ -31,7 +29,7 @@ public class PlayActivity extends AppCompatActivity
         implements WordToTypeView.WordListener, WordTimerView.WordTimerListener {
 
     // Game timer
-    private final int GAME_TIME_SECONDS = 60;
+    private final int GAME_TIME_SECONDS = 30;
     private final int TIMER_INTERVAL_MILLISECONDS = 1000;
     private int lastRemainingMs;
     private TextView txtGameTimer;
@@ -153,7 +151,7 @@ public class PlayActivity extends AppCompatActivity
         stats.setScore(this.score);
 
         // Send to FinalActivity
-        Intent intent = new Intent(PlayActivity.this, StatsTestActivity.class);
+        Intent intent = new Intent(PlayActivity.this, StatsActivity.class);
         // Pass stats object to FinalActivity
         intent.putExtra("stats", stats);
         startActivity(intent);
@@ -237,7 +235,7 @@ public class PlayActivity extends AppCompatActivity
     @Override public void wrongInput() {
 
     }
-    @Override public void wordCompleted() {
+    @Override public void wordCompleted(boolean perfect) {
         wordCompleted = true;
 
         // Stop word timer to avoid calling this again
@@ -260,7 +258,7 @@ public class PlayActivity extends AppCompatActivity
 
     // WordTimer view
     @Override public void timesUp() {
-        wordCompleted();
+        wordCompleted(false);
     }
 
     private void updateScore(int scoreDiff) {

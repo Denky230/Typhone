@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">Typhone</string>
+    <string name="app_name" translatable="false">Typhone</string>
     <string name="btnPlay">Play</string>
     <string name="btnScore">Score</string>
     <string name="lblMusic">Music</string>
     <string name="btnLanguages">English</string>
-    <string name="lblHighscore">HighScore</string>
+    <string name="lblHighscore" translatable="false">HighScore</string>
     <string name="lblScore">Score</string>
     <string name="lblTotalInputs">Total Inputs</string>
     <string name="lblAccuracy">Accuracy</string>

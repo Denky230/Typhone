@@ -23,6 +23,7 @@ public class WordToTypeView extends View {
 
     private Word word;      // Word to type
     private int cursor;     // Current letter index
+    private boolean perfect = true;
 
     private final TextPaint paint;
 
@@ -69,6 +70,7 @@ public class WordToTypeView extends View {
             word.getLetterAt(cursor).setColor(Style.RIGHT);
             listener.rightInput();
         } else {
+            perfect = false;
             word.getLetterAt(cursor).setColor(Style.WRONG);
             listener.wrongInput();
         }
@@ -77,7 +79,7 @@ public class WordToTypeView extends View {
         cursor++;
         // Check if word is completed
         if (cursor == word.getLength()) {
-            listener.wordCompleted();
+            listener.wordCompleted(perfect);
         }
 
         return right;
@@ -251,7 +253,7 @@ public class WordToTypeView extends View {
     public interface WordListener {
         void rightInput();
         void wrongInput();
-        void wordCompleted();
+        void wordCompleted(boolean perfect);
     }
     protected WordListener listener;
     public void setWordListener(WordListener listener) {

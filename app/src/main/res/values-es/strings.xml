@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="lblHighscore">HighScore</string>
     <string name="btnHome">Menu</string>
     <string name="btnLanguages">Español</string>
     <string name="btnPlay">Jugar</string>
