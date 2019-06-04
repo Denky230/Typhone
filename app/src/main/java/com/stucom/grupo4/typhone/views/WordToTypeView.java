@@ -23,7 +23,7 @@ public class WordToTypeView extends View {
 
     private Word word;      // Word to type
     private int cursor;     // Current letter index
-    private boolean perfect = true;
+    private boolean perfect;
 
     private final TextPaint paint;
 
@@ -57,6 +57,7 @@ public class WordToTypeView extends View {
         this.word = new Word(word);
         // Reset cursor position
         cursor = 0;
+        perfect = true;
     }
 
     public boolean validateInput(char letterInput) {

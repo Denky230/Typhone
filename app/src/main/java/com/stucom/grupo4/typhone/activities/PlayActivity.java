@@ -1,6 +1,7 @@
 package com.stucom.grupo4.typhone.activities;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -40,9 +41,6 @@ public class PlayActivity extends AppCompatActivity
     private TextView txtScore;
     private int score;
 
-    // Modifier's images
-    private ImageView image;
-
     // In-game stats
     private Stats stats;
 
@@ -63,6 +61,7 @@ public class PlayActivity extends AppCompatActivity
     // When a word is completed, briefly block game
     private boolean wordCompleted;
 
+    // On word compleated correctly
     private AudioController audio;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -254,6 +253,13 @@ public class PlayActivity extends AppCompatActivity
                 updateWordToType();
             }
         }.start();
+
+        Tools.log("this is " + perfect);
+
+        if(perfect){
+            updateScore(30);
+            audio.playSfx(getApplicationContext(), AudioController.Music.CASH);
+        }
     }
 
     // WordTimer view

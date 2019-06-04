@@ -10,7 +10,7 @@ import com.stucom.grupo4.typhone.R;
 public class AudioController {
 
     private MediaPlayer mediaPlayer;        // Media player for background music
-    private final SoundPool soundPool;      // Sound pool for sound effects
+    private MediaPlayer sfx;        // Media player for sound effects
 
     private boolean musicMuted, sfxMuted;
     private int currentMusicResID;          // Store track currently played
@@ -18,8 +18,8 @@ public class AudioController {
     // Game music enum
     public enum Music {
         MENU(R.raw.superboy),
-        GAME(R.raw.space_trip);
-
+        GAME(R.raw.space_trip),
+        CASH(R.raw.cash_register);
         int id;
         Music(int id) { this.id = id; }
     }
@@ -27,7 +27,6 @@ public class AudioController {
     private AudioController() {
         this.mediaPlayer = new MediaPlayer();
         this.mediaPlayer.setVolume(1f, 1f);
-        this.soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
     }
     private static AudioController instance;
     public static AudioController getInstance() {
@@ -63,9 +62,10 @@ public class AudioController {
         mediaPlayer.release();
     }
 
-    public void playSfx(int resID) {
+    public void playSfx(Context context, Music music) {
         if (!sfxMuted) {
-            soundPool.play(resID, 1, 1, 1, 0, 1);
+            sfx = MediaPlayer.create(context, music.id);
+            sfx.start();
         }
     }
 
