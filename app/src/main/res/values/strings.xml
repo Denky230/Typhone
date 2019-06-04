@@ -2,8 +2,16 @@
     <string name="app_name">Typhone</string>
     <string name="btnPlay">Play</string>
     <string name="btnScore">Score</string>
-    <string name="lblScoreboard">Scoreboard</string>
-    <string name="lblSettings">Settings</string>
     <string name="lblMusic">Music</string>
-    <string name="btn_languages">English</string>
+    <string name="btnLanguages">English</string>
+    <string name="lblHighscore">HighScore</string>
+    <string name="lblScore">Score</string>
+    <string name="lblTotalInputs">Total Inputs</string>
+    <string name="lblAccuracy">Accuracy</string>
+    <string name="lblInputsPerSecond">Inputs / Second</string>
+    <string name="lblHighestStreak">Highest Streak</string>
+    <string name="lblWord">Word</string>
+    <string name="lblLetter">Letter</string>
+    <string name="btnReplay">Replay</string>
+    <string name="btnHome">Home</string>
 </resources>

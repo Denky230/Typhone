@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.PlayActivity">
+    tools:context=".activities.PlayActivity"
+    android:background="@drawable/pattern_typhone">
 
     <TextView
         android:id="@+id/lblScoreStat"

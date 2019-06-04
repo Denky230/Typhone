@@ -38,5 +38,26 @@ public class SettingsActivity extends AppCompatActivity {
                 audio.muteSfx(!isChecked);
             }
         });
+/*
+        //not working.....
+        Button btnLanguage = findViewById(R.id.btnLanguages);
+        btnLanguage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Locale locale = new Locale("es");
+                Locale.setDefault(locale);
+                Configuration config = getResources().getConfiguration();
+                //config.locale = locale;
+                config.setLocale(locale);
+                getApplicationContext().getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+
+                //recreate();
+
+                Intent intent = new Intent(SettingsActivity.this, SettingsActivity.class);
+                finish();
+                startActivity(intent);
+            }
+        });
+*/
     }
 }

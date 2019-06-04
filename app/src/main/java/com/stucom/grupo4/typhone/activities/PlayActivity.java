@@ -123,6 +123,9 @@ public class PlayActivity extends AppCompatActivity
         super.onPause();
     }
     @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        //TODO function for each 1000 milis que vaya sumando un contador para los inputs/second
+
         if (!wordCompleted) {
             // Get user input letter
             String key = KeyEvent.keyCodeToString(keyCode);

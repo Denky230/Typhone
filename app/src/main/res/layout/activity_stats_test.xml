@@ -5,23 +5,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.StatsTestActivity"
-    android:id="@+id/entireView">
+    android:id="@+id/entireView"
+    android:background="@drawable/pattern_typhone">
 
-    <TextView
-        android:id="@+id/lblGameStats"
-        android:layout_width="197dp"
-        android:layout_height="56dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Game Stats"
-        android:textSize="36sp"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.07999998" />
+        app:layout_constraintVertical_bias="0.87">
+
+        <Button
+            android:id="@+id/btnReplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="REPLAY"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HOME"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnReplay"
+            app:layout_constraintVertical_bias="0.0" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -49,7 +72,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/lblHighscore"
                     android:layout_width="153dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="20dp"
@@ -70,7 +93,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView15"
+                    android:id="@+id/lblScore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
@@ -92,7 +115,7 @@
                 android:layout_marginTop="30dp">
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/lblTotalInputs"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
@@ -113,7 +136,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/lblAccuracy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
@@ -146,7 +169,7 @@
                 android:layout_marginTop="30dp">
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/lblInputsPerSecond"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
@@ -203,7 +226,7 @@
                 android:layout_marginTop="30dp">
 
                 <TextView
-                    android:id="@+id/textView9"
+                    android:id="@+id/lblHighestStreak"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
@@ -216,7 +239,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView10"
+                    android:id="@+id/lblWord"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
@@ -237,7 +260,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView11"
+                    android:id="@+id/lblLetter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
@@ -267,7 +290,7 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblGameStats" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -283,5 +306,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/subway_surfers_ad" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="336dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.04000002"
+        app:srcCompat="@drawable/game_stats_logo" />
 
 </android.support.constraint.ConstraintLayout>

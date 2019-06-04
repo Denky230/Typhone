@@ -64,7 +64,7 @@ public class StatsTestActivity extends AppCompatActivity {
 
         letterStreak = findViewById(R.id.lblLetterStreakStat);
         letterStreak.setText(String.valueOf(stats.getHiStreakLetter()));
-
+/*
         fullActivity = findViewById(R.id.entireView);
         fullActivity.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -75,11 +75,33 @@ public class StatsTestActivity extends AppCompatActivity {
                     startActivity(intent);
                     //Fade this activity and
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    finish();
 
                     return true;
                 }
                 return false;
+            }
+        });
+*/
+
+        // Replay button
+        findViewById(R.id.btnReplay).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Send to PlayActivity (start new game)
+                Intent intent = new Intent(StatsTestActivity.this, PlayActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        // Home button
+        findViewById(R.id.btnHome).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Send to HomeActivity
+                Intent intent = new Intent(StatsTestActivity.this, HomeActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -92,18 +114,20 @@ public class StatsTestActivity extends AppCompatActivity {
 
         if(grade < 300){
             return "F";
-        }else if(grade > 300 && grade < 600){
+        }else if(grade > 300 && grade <= 600){
             return "D";
-        }else if(grade > 600 && grade < 1000){
+        }else if(grade > 600 && grade <= 1000){
             return "C";
-        }else if(grade > 1000 && grade < 1200){
+        }else if(grade > 1000 && grade <= 1200){
             return "B";
-        }else if(grade > 1200 && grade < 1600){
+        }else if(grade > 1200 && grade <= 1600){
             return "A";
-        }else if(grade > 1600 && grade < 2000){
+        }else if(grade > 1600 && grade <= 2000){
             return "S";
-        }else{
+        }else if(grade > 2000 && grade <= 2500){
             return "SS";
+        }else{
+            return "SSS";
         }
     }
 

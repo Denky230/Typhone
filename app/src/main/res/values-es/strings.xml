@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lblHighscore">HighScore</string>
+    <string name="btnHome">Menu</string>
+    <string name="btnLanguages">Español</string>
+    <string name="btnPlay">Jugar</string>
+    <string name="btnReplay">Repetir</string>
+    <string name="btnScore">Puntuación</string>
+    <string name="lblAccuracy">Precisión</string>
+    <string name="lblHighestStreak">Racha más Alta</string>
+    <string name="lblInputsPerSecond">Entradas / Segundo</string>
+    <string name="lblLetter">Letra</string>
+    <string name="lblMusic">Música</string>
+    <string name="lblScore">Puntuación</string>
+    <string name="lblTotalInputs">Entradas Totales</string>
+    <string name="lblWord">Palabra</string>
+</resources>
