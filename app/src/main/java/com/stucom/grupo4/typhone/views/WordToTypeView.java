@@ -228,7 +228,7 @@ public class WordToTypeView extends View {
             word.getLetterAt(i).setX(x);
         }
 
-        // Apply word modifiers here
+        // Apply word modifiers
         for (Modifier modifier : gameController.getActiveModifiers()) {
             if (modifier instanceof WordModifier) {
                 WordModifier wordModifier = (WordModifier) modifier;

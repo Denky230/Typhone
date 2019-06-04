@@ -7,7 +7,7 @@ import android.view.View;
 
 import com.stucom.grupo4.typhone.R;
 
-public class StatsActivity extends AppCompatActivity {
+public class FinalActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +19,7 @@ public class StatsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Send to PlayActivity (start new game)
-                Intent intent = new Intent(StatsActivity.this, PlayActivity.class);
+                Intent intent = new Intent(FinalActivity.this, PlayActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -30,7 +30,7 @@ public class StatsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Send to HomeActivity
-                Intent intent = new Intent(StatsActivity.this, HomeActivity.class);
+                Intent intent = new Intent(FinalActivity.this, HomeActivity.class);
                 startActivity(intent);
                 finish();
             }

@@ -71,7 +71,7 @@ public class StatsTestActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 if(event.getAction() == MotionEvent.ACTION_DOWN){
 
-                    Intent intent = new Intent(StatsTestActivity.this, StatsActivity.class);
+                    Intent intent = new Intent(StatsTestActivity.this, FinalActivity.class);
                     startActivity(intent);
                     //Fade this activity and
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

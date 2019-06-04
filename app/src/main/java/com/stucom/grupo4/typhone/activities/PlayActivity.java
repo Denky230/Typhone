@@ -65,7 +65,6 @@ public class PlayActivity extends AppCompatActivity
     // When a word is completed, briefly block game
     private boolean wordCompleted;
 
-    private GameController controller;
     private AudioController audio;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +86,6 @@ public class PlayActivity extends AppCompatActivity
         txtGameTimer = findViewById(R.id.lblGameTimer);
         txtGameTimer.setTranslationY(-25f);
 
-        controller = GameController.getInstance();
         audio = AudioController.getInstance();
         wordPool = new ArrayList<>();
         stats = new Stats();
@@ -154,9 +152,9 @@ public class PlayActivity extends AppCompatActivity
         // Set game score to game stats
         stats.setScore(this.score);
 
-        // Send to StatsActivity
+        // Send to FinalActivity
         Intent intent = new Intent(PlayActivity.this, StatsTestActivity.class);
-        // Pass stats object to StatsActivity
+        // Pass stats object to FinalActivity
         intent.putExtra("stats", stats);
         startActivity(intent);
         finish();
@@ -171,6 +169,7 @@ public class PlayActivity extends AppCompatActivity
 
                 // Check elapsed game time
                 int gameTimeSecs = GAME_TIME_SECONDS - secsLeft;
+                Tools.log(String.valueOf(gameTimeSecs));
                 if (gameTimeSecs >= eventView.nextEventStateSeconds) {
                     eventView.nextEventState();;
                 }

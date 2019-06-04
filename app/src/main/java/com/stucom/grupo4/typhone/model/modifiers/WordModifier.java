@@ -7,7 +7,7 @@ import com.stucom.grupo4.typhone.model.Word;
 
 public abstract class WordModifier extends Modifier {
 
-    WordModifier(int iconResID) {
+    public WordModifier(int iconResID) {
         super(iconResID);
     }
 
