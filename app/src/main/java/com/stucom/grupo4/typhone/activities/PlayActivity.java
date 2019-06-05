@@ -1,6 +1,7 @@
 package com.stucom.grupo4.typhone.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -64,6 +65,10 @@ public class PlayActivity extends AppCompatActivity
     // On word compleated correctly
     private AudioController audio;
 
+
+    // counter
+    int counter = 0;
+
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
@@ -120,6 +125,9 @@ public class PlayActivity extends AppCompatActivity
     @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         //TODO function for each 1000 milis que vaya sumando un contador para los inputs/second
+        //llamar desde aqui a la función i que guarde en un arraylist<int> las keys que ha tocado x segundo
+        counter = 0;
+        inputsXSecond(keyCode);
 
         if (!wordCompleted) {
             // Get user input letter
@@ -136,6 +144,10 @@ public class PlayActivity extends AppCompatActivity
         return super.onKeyDown(keyCode, event);
     }
 
+    private void inputsXSecond(int inputs){
+        //for(int i= tiempox; i <tiempoy ; i++){ counter=+inputs } maybe?
+    }
+
     private void startGame() {
         // Reset game variables
         setScore(0);
@@ -148,6 +160,12 @@ public class PlayActivity extends AppCompatActivity
     private void gameOver() {
         // Set game score to game stats
         stats.setScore(this.score);
+
+        // Shared preferences to save the score
+        SharedPreferences prefs = getSharedPreferences(getPackageName(), MODE_PRIVATE);
+        SharedPreferences.Editor ed = prefs.edit();
+        ed.putInt("score", this.score);
+        ed.apply();
 
         // Send to FinalActivity
         Intent intent = new Intent(PlayActivity.this, StatsActivity.class);
@@ -168,7 +186,7 @@ public class PlayActivity extends AppCompatActivity
                 int gameTimeSecs = GAME_TIME_SECONDS - secsLeft;
                 Tools.log(String.valueOf(gameTimeSecs));
                 if (gameTimeSecs >= eventView.nextEventStateSeconds) {
-                    eventView.nextEventState();;
+                    eventView.nextEventState();
                 }
             }
 
@@ -258,7 +276,7 @@ public class PlayActivity extends AppCompatActivity
 
         if(perfect){
             updateScore(30);
-            audio.playSfx(getApplicationContext(), AudioController.Music.CASH);
+            audio.playSfx(this, AudioController.Music.CASH);
         }
     }
 

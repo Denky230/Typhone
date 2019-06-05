@@ -23,7 +23,8 @@ public class WordToTypeView extends View {
 
     private Word word;      // Word to type
     private int cursor;     // Current letter index
-    private boolean perfect;
+    private boolean perfect; //Word correct
+    private int wordStreak = 0, letterStreak = 0; // Streak
 
     private final TextPaint paint;
 
@@ -68,12 +69,22 @@ public class WordToTypeView extends View {
         boolean right = isInputRight(letterInput);
         // Take actions based on result
         if (right) {
+            letterStreak++;
             word.getLetterAt(cursor).setColor(Style.RIGHT);
             listener.rightInput();
         } else {
+            //should meterlo en una array antes de borrarlo y luego checkar cual es la rachha mas alta
+            letterStreak = 0;
             perfect = false;
             word.getLetterAt(cursor).setColor(Style.WRONG);
             listener.wrongInput();
+        }
+
+        if(perfect){
+            wordStreak++;
+        }else{
+            //should meterlo en una array antes de borrarlo y luego checkar cual es la rachha mas alta
+            wordStreak = 0;
         }
 
         // Prepare to redraw next letter

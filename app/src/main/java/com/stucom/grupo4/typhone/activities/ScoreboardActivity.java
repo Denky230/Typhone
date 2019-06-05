@@ -1,5 +1,6 @@
 package com.stucom.grupo4.typhone.activities;
 
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 import com.stucom.grupo4.typhone.R;
 import com.stucom.grupo4.typhone.model.User;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,6 +42,61 @@ public class ScoreboardActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(dividerItemDecoration);
     }
     /* TEST */
+
+    private List<Integer> getScores(){
+        ArrayList<Integer> ranking = new ArrayList<>();
+        SharedPreferences prefs = getSharedPreferences(getPackageName(), MODE_PRIVATE);
+        int score = prefs.getInt("score", 0);
+        ranking.add(score);
+        return ranking;
+    }
+
+    private void fillRanking(){
+        List<Integer> score = Arrays.asList(
+            //getScores()
+        );
+        ScoreAdapter adapter = new ScoreAdapter(score);
+        recyclerView.setAdapter(adapter);
+    }
+
+    class ScoreViewHolder extends RecyclerView.ViewHolder {
+        final TextView rank;
+        final TextView score;
+
+        ScoreViewHolder(View itemView){
+            super(itemView);
+            rank = itemView.findViewById(R.id.lblRank);
+            score = itemView.findViewById(R.id.lblScoreStat);
+        }
+    }
+
+    class ScoreAdapter extends RecyclerView.Adapter<ScoreViewHolder>{
+        private List<Integer> score;
+        ScoreAdapter(List<Integer> score){
+            super();
+            this.score = score;
+        }
+
+        @NonNull
+        @Override public ScoreViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int position){
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ranking_item, parent, false);
+            return  new ScoreViewHolder(view);
+        }
+
+        @Override public void onBindViewHolder(@NonNull final ScoreViewHolder viewHolder, final int position){
+
+            // Set User values in ranking layout
+            viewHolder.rank.setText(String.valueOf(position + 1));
+            int offset = 1548 * position;
+            viewHolder.score.setText(String.valueOf(184510 - offset));
+        }
+
+        @Override public int getItemCount() { return score.size(); }
+    }
+
+
+
+    /*
     private void fillRanking() {
         List<User> ranking = Arrays.asList(
                 new User("Jose", ""),
@@ -131,5 +189,5 @@ public class ScoreboardActivity extends AppCompatActivity {
 //            });
         }
         @Override public int getItemCount() { return users.size(); }
-    }
+    }*/
 }
