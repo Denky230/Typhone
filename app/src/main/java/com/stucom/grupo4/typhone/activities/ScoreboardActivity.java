@@ -14,16 +14,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.stucom.grupo4.typhone.R;
-import com.stucom.grupo4.typhone.model.User;
+import com.stucom.grupo4.typhone.tools.Tools;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
 
 public class ScoreboardActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
+    private ArrayList<Integer> scores = new ArrayList<>();
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,19 +42,25 @@ public class ScoreboardActivity extends AppCompatActivity {
     }
     /* TEST */
 
-    private List<Integer> getScores(){
-        ArrayList<Integer> ranking = new ArrayList<>();
+    private Integer getScores(){
         SharedPreferences prefs = getSharedPreferences(getPackageName(), MODE_PRIVATE);
-        int score = prefs.getInt("score", 0);
-        ranking.add(score);
-        return ranking;
+        return prefs.getInt("score", 0);
     }
 
     private void fillRanking(){
-        List<Integer> score = Arrays.asList(
-            //getScores()
-        );
-        ScoreAdapter adapter = new ScoreAdapter(score);
+
+        // Make ranking sorted from max to min
+        Collections.sort(scores);
+
+        if(scores.size() < 10){
+            scores.add(getScores());
+            
+        }else{
+            //comprobar si ha superado algun score que ya tienes y si si añadirlo y sacar el más bajo
+        }
+
+        Tools.log(scores.get(0) + " ranking score");
+        ScoreAdapter adapter = new ScoreAdapter(scores);
         recyclerView.setAdapter(adapter);
     }
 
@@ -71,8 +76,8 @@ public class ScoreboardActivity extends AppCompatActivity {
     }
 
     class ScoreAdapter extends RecyclerView.Adapter<ScoreViewHolder>{
-        private List<Integer> score;
-        ScoreAdapter(List<Integer> score){
+        private ArrayList<Integer> score;
+        ScoreAdapter(ArrayList<Integer> score){
             super();
             this.score = score;
         }
@@ -80,15 +85,15 @@ public class ScoreboardActivity extends AppCompatActivity {
         @NonNull
         @Override public ScoreViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int position){
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ranking_item, parent, false);
-            return  new ScoreViewHolder(view);
+            return new ScoreViewHolder(view);
         }
 
         @Override public void onBindViewHolder(@NonNull final ScoreViewHolder viewHolder, final int position){
-
             // Set User values in ranking layout
             viewHolder.rank.setText(String.valueOf(position + 1));
-            int offset = 1548 * position;
-            viewHolder.score.setText(String.valueOf(184510 - offset));
+            for(int i = 0; i < scores.size(); i++) {
+                viewHolder.score.setText(String.valueOf(scores.get(i)));
+            }
         }
 
         @Override public int getItemCount() { return score.size(); }
