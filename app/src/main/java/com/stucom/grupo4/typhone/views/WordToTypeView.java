@@ -17,6 +17,8 @@ import com.stucom.grupo4.typhone.model.Word;
 import com.stucom.grupo4.typhone.model.modifiers.Modifier;
 import com.stucom.grupo4.typhone.model.modifiers.WordModifier;
 
+import java.util.ArrayList;
+
 public class WordToTypeView extends View {
 
     private final GameController gameController;
@@ -24,6 +26,7 @@ public class WordToTypeView extends View {
     private Word word;      // Word to type
     private int cursor;     // Current letter index
     private boolean perfect; //Word correct
+    private ArrayList<Integer> words;
     private int wordStreak = 0, letterStreak = 0; // Streak
 
     private final TextPaint paint;
@@ -73,7 +76,7 @@ public class WordToTypeView extends View {
             word.getLetterAt(cursor).setColor(Style.RIGHT);
             listener.rightInput();
         } else {
-            //should meterlo en una array antes de borrarlo y luego checkar cual es la rachha mas alta
+            listener.letterStreak(letterStreak);
             letterStreak = 0;
             perfect = false;
             word.getLetterAt(cursor).setColor(Style.WRONG);
@@ -83,7 +86,8 @@ public class WordToTypeView extends View {
         if(perfect){
             wordStreak++;
         }else{
-            //should meterlo en una array antes de borrarlo y luego checkar cual es la rachha mas alta
+            // Before setting it to 0 we add it to the arraylist
+            listener.wordStreak(wordStreak);
             wordStreak = 0;
         }
 
@@ -266,6 +270,8 @@ public class WordToTypeView extends View {
         void rightInput();
         void wrongInput();
         void wordCompleted(boolean perfect);
+        void wordStreak(int word);
+        void letterStreak(int letter);
     }
     protected WordListener listener;
     public void setWordListener(WordListener listener) {

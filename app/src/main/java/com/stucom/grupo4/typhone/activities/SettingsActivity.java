@@ -1,12 +1,19 @@
 package com.stucom.grupo4.typhone.activities;
 
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import com.stucom.grupo4.typhone.R;
 import com.stucom.grupo4.typhone.control.AudioController;
+import com.stucom.grupo4.typhone.tools.Tools;
+
+import java.util.Locale;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -38,8 +45,7 @@ public class SettingsActivity extends AppCompatActivity {
                 audio.muteSfx(!isChecked);
             }
         });
-/*
-        //not working.....
+
         Button btnLanguage = findViewById(R.id.btnLanguages);
         btnLanguage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,8 +54,11 @@ public class SettingsActivity extends AppCompatActivity {
                 Locale.setDefault(locale);
                 Configuration config = getResources().getConfiguration();
                 //config.locale = locale;
+
                 config.setLocale(locale);
                 getApplicationContext().getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+
+                Tools.log(Locale.getDefault() + " locale");
 
                 //recreate();
 
@@ -58,6 +67,6 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-*/
+
     }
 }

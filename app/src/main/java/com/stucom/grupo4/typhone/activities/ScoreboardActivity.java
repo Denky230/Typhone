@@ -54,7 +54,7 @@ public class ScoreboardActivity extends AppCompatActivity {
 
         if(scores.size() < 10){
             scores.add(getScores());
-            
+
         }else{
             //comprobar si ha superado algun score que ya tienes y si si añadirlo y sacar el más bajo
         }

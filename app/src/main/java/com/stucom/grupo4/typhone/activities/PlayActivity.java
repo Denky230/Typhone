@@ -3,6 +3,7 @@ package com.stucom.grupo4.typhone.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -65,6 +67,9 @@ public class PlayActivity extends AppCompatActivity
     // On word compleated correctly
     private AudioController audio;
 
+    // Streaks
+    ArrayList<Integer> words = new ArrayList<>();
+    ArrayList<Integer> letters = new ArrayList<>();
 
     // counter
     int counter = 0;
@@ -127,7 +132,7 @@ public class PlayActivity extends AppCompatActivity
         //TODO function for each 1000 milis que vaya sumando un contador para los inputs/second
         //llamar desde aqui a la función i que guarde en un arraylist<int> las keys que ha tocado x segundo
         counter = 0;
-        inputsXSecond(keyCode);
+        inputsXSecond();
 
         if (!wordCompleted) {
             // Get user input letter
@@ -144,8 +149,20 @@ public class PlayActivity extends AppCompatActivity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void inputsXSecond(int inputs){
-        //for(int i= tiempox; i <tiempoy ; i++){ counter=+inputs } maybe?
+    private void inputsXSecond(){
+        //for(int i= tiempox; i <tiempoy ; i++){ counter++; } maybe?
+    }
+
+    @Override
+    public void wordStreak(int word){
+        words.add(word);
+        Tools.log("adding word to array" + word);
+    }
+
+    @Override
+    public void letterStreak(int letter){
+        letters.add(letter);
+        Tools.log("adding letter to array: " + letter);
     }
 
     private void startGame() {
@@ -166,6 +183,13 @@ public class PlayActivity extends AppCompatActivity
         SharedPreferences.Editor ed = prefs.edit();
         ed.putInt("score", this.score);
         ed.apply();
+
+        Tools.log("Arraylist size: " +letters.size());
+        Tools.log("Arraylist get first: " +letters.get(0));
+
+        // Assign max streaks to stats
+        stats.setHiStreakWord(Collections.max(words));
+        stats.setHiStreakLetter(Collections.max(letters));
 
         // Send to FinalActivity
         Intent intent = new Intent(PlayActivity.this, StatsActivity.class);
