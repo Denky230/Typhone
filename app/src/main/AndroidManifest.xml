@@ -17,7 +17,8 @@
 
         <activity
             android:name=".activities.HomeActivity"
-            android:theme="@style/AppTheme.FullscreenPortrait">
+            android:theme="@style/AppTheme.FullscreenPortrait"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -28,19 +29,23 @@
             android:name=".activities.PlayActivity"
             android:inputType="textNoSuggestions|textFilter|textVisiblePassword"
             android:windowSoftInputMode="stateAlwaysVisible|adjustNothing"
-            android:theme="@style/AppTheme.FullscreenPortrait" />
+            android:theme="@style/AppTheme.FullscreenPortrait"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activities.ScoreboardActivity"
-            android:theme="@style/AppTheme.FullscreenPortrait" />
+            android:theme="@style/AppTheme.FullscreenPortrait"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activities.SettingsActivity"
-            android:theme="@style/AppTheme.FullscreenPortrait" />
+            android:theme="@style/AppTheme.FullscreenPortrait"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activities.StatsActivity"
-            android:theme="@style/AppTheme.FullscreenPortrait" />
+            android:theme="@style/AppTheme.FullscreenPortrait"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".activities.FinalActivity"

@@ -28,6 +28,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         // Init music switch
         Switch musicSwitch = findViewById(R.id.switchMusic);
+        musicSwitch.setText(R.string.lblMusic);
         musicSwitch.setChecked(!audio.isMusicMuted());
         musicSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -46,16 +47,21 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        Tools.log(Locale.getDefault() + " locale");
+
+        //needs to be done from the phone settings
+
         Button btnLanguage = findViewById(R.id.btnLanguages);
+        btnLanguage.setText(R.string.btnLanguages);
         btnLanguage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Locale locale = new Locale("es");
+                Locale locale = new Locale("es_ES");
                 Locale.setDefault(locale);
                 Configuration config = getResources().getConfiguration();
-                //config.locale = locale;
+                config.locale = locale;
 
-                config.setLocale(locale);
+                //config.setLocale(locale);
                 getApplicationContext().getResources().updateConfiguration(config, getResources().getDisplayMetrics());
 
                 Tools.log(Locale.getDefault() + " locale");
@@ -63,8 +69,8 @@ public class SettingsActivity extends AppCompatActivity {
                 //recreate();
 
                 Intent intent = new Intent(SettingsActivity.this, SettingsActivity.class);
-                finish();
                 startActivity(intent);
+                finish();
             }
         });
 

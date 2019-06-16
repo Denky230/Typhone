@@ -7,10 +7,12 @@ import android.view.View;
 
 import com.stucom.grupo4.typhone.R;
 import com.stucom.grupo4.typhone.control.AudioController;
+import com.stucom.grupo4.typhone.tools.DatabaseHelper;
 
 public class HomeActivity extends AppCompatActivity {
 
     private AudioController audio;
+    private DatabaseHelper mDatabaseHelper;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +46,8 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        mDatabaseHelper = new DatabaseHelper(this);
     }
     @Override protected void onResume() {
         super.onResume();

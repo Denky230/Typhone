@@ -2,6 +2,8 @@ package com.stucom.grupo4.typhone.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import com.stucom.grupo4.typhone.R;
 import com.stucom.grupo4.typhone.control.AudioController;
 import com.stucom.grupo4.typhone.control.GameController;
 import com.stucom.grupo4.typhone.model.Stats;
+import com.stucom.grupo4.typhone.tools.DatabaseHelper;
 import com.stucom.grupo4.typhone.tools.Tools;
 import com.stucom.grupo4.typhone.views.EventView;
 import com.stucom.grupo4.typhone.views.WordTimerView;
@@ -32,8 +35,11 @@ import java.util.Locale;
 public class PlayActivity extends AppCompatActivity
         implements WordToTypeView.WordListener, WordTimerView.WordTimerListener {
 
+    // Database
+    private DatabaseHelper mDatabaseHelper;
+
     // Game timer
-    private final int GAME_TIME_SECONDS = 30;
+    private final int GAME_TIME_SECONDS = 10;
     private final int TIMER_INTERVAL_MILLISECONDS = 1000;
     private int lastRemainingMs;
     private TextView txtGameTimer;
@@ -68,11 +74,8 @@ public class PlayActivity extends AppCompatActivity
     private AudioController audio;
 
     // Streaks
-    ArrayList<Integer> words = new ArrayList<>();
-    ArrayList<Integer> letters = new ArrayList<>();
-
-    // counter
-    int counter = 0;
+    int words = 0;
+    int letters = 0;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +104,9 @@ public class PlayActivity extends AppCompatActivity
         lastRemainingMs = GAME_TIME_SECONDS * 1000;
         txtGameTimer.setText(String.valueOf(GAME_TIME_SECONDS));
 
+        // Initiates db
+        mDatabaseHelper = new DatabaseHelper(this);
+
         // Load Default words
         readWordPool();
 
@@ -128,12 +134,6 @@ public class PlayActivity extends AppCompatActivity
         super.onPause();
     }
     @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        //TODO function for each 1000 milis que vaya sumando un contador para los inputs/second
-        //llamar desde aqui a la función i que guarde en un arraylist<int> las keys que ha tocado x segundo
-        counter = 0;
-        inputsXSecond();
-
         if (!wordCompleted) {
             // Get user input letter
             String key = KeyEvent.keyCodeToString(keyCode);
@@ -149,20 +149,20 @@ public class PlayActivity extends AppCompatActivity
         return super.onKeyDown(keyCode, event);
     }
 
-    private void inputsXSecond(){
-        //for(int i= tiempox; i <tiempoy ; i++){ counter++; } maybe?
-    }
-
     @Override
     public void wordStreak(int word){
-        words.add(word);
-        Tools.log("adding word to array" + word);
+        if(words < word){
+            words = word;
+        }
+        Tools.log("adding word " + word);
     }
 
     @Override
     public void letterStreak(int letter){
-        letters.add(letter);
-        Tools.log("adding letter to array: " + letter);
+        if(letters < letter){
+            letters = letter;
+        }
+        Tools.log("adding letter: " + letter);
     }
 
     private void startGame() {
@@ -178,18 +178,14 @@ public class PlayActivity extends AppCompatActivity
         // Set game score to game stats
         stats.setScore(this.score);
 
-        // Shared preferences to save the score
-        SharedPreferences prefs = getSharedPreferences(getPackageName(), MODE_PRIVATE);
-        SharedPreferences.Editor ed = prefs.edit();
-        ed.putInt("score", this.score);
-        ed.apply();
+        addNewScore();
 
-        Tools.log("Arraylist size: " +letters.size());
-        Tools.log("Arraylist get first: " +letters.get(0));
+        Tools.log("max words: " +words);
+        Tools.log("max letters: " +letters);
 
         // Assign max streaks to stats
-        stats.setHiStreakWord(Collections.max(words));
-        stats.setHiStreakLetter(Collections.max(letters));
+        stats.setHiStreakWord(words);
+        stats.setHiStreakLetter(letters);
 
         // Send to FinalActivity
         Intent intent = new Intent(PlayActivity.this, StatsActivity.class);
@@ -266,6 +262,34 @@ public class PlayActivity extends AppCompatActivity
             }
         } catch (IOException e) {
             e.getStackTrace();
+        }
+    }
+
+    // Add score to SQLite
+    private void addNewScore(){
+        //TODO fucnion que cheque la bbdd si el score obtenido es mas grande que los otros
+        Cursor data = mDatabaseHelper.getData();
+        // Si no es null o si esta vacia
+        if(data.moveToFirst() && data.getCount() >= 3){
+
+            do{
+                // Sobreescribe todas las puntuaciones... Change
+                if (this.score > Integer.parseInt(data.getString(1))) {
+
+                    Tools.log(data.getString(1) + " scores in database");
+
+                    mDatabaseHelper.removeData(data.getString(1));
+
+                    // SQLite saving score (llamar a una funcion que mire si este score es mas grande que los otros y si eso reemplazarlo)
+                    String saveScore = String.valueOf(this.score);
+                    mDatabaseHelper.addData(saveScore);
+                }
+
+            }while(data.moveToNext());
+
+        }else{
+            Tools.log("this score: " + this.score);
+            mDatabaseHelper.addData(String.valueOf(this.score));
         }
     }
 

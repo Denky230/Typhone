@@ -86,7 +86,7 @@ public class WordToTypeView extends View {
         if(perfect){
             wordStreak++;
         }else{
-            // Before setting it to 0 we add it to the arraylist
+            // Before setting it to 0 we add it to a variable
             listener.wordStreak(wordStreak);
             wordStreak = 0;
         }
