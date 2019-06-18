@@ -1,6 +1,9 @@
 package com.stucom.grupo4.typhone.activities;
 
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,12 +11,14 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.stucom.grupo4.typhone.R;
+import com.stucom.grupo4.typhone.tools.DatabaseHelper;
 import com.stucom.grupo4.typhone.tools.Tools;
 
 import java.util.ArrayList;
@@ -22,11 +27,14 @@ import java.util.Collections;
 public class ScoreboardActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private ArrayList<Integer> scores = new ArrayList<>();
+    private ArrayList<String> scores = new ArrayList<>();
+    private DatabaseHelper mDatabaseHelper;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scoreboard);
+
+        mDatabaseHelper = new DatabaseHelper(this);
 
         initRecyclerView();
         fillRanking();
@@ -40,26 +48,35 @@ public class ScoreboardActivity extends AppCompatActivity {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
     }
-    /* TEST */
-
-    private Integer getScores(){
-        SharedPreferences prefs = getSharedPreferences(getPackageName(), MODE_PRIVATE);
-        return prefs.getInt("score", 0);
-    }
 
     private void fillRanking(){
 
-        // Make ranking sorted from max to min
-        Collections.sort(scores);
+        /*Cursor data = mDatabaseHelper.getData();
+        if(data != null){
+            while(data.moveToNext()){
+                scores.add(data.getString(1));
+            }
+        }*/
 
-        if(scores.size() < 10){
-            scores.add(getScores());
-            
-        }else{
-            //comprobar si ha superado algun score que ya tienes y si si añadirlo y sacar el más bajo
+        try {
+/*            SQLiteDatabase sdb = mDatabaseHelper.getReadableDatabase();
+            Cursor data = sdb.rawQuery("SELECT score FROM scoreboard ORDER BY CAST (score AS INTEGER);", null);
+*/
+            Cursor data = mDatabaseHelper.getData();
+            if(data.moveToFirst()){
+                do{
+                    scores.add(data.getString(data.getColumnIndex("score")));
+                }while(data.moveToNext());
+            }
+          //  sdb.close();
+
+        }catch(SQLiteException e){
+            Log.e(getClass().getSimpleName(), "Could not open database");
+        }finally{
+            if(mDatabaseHelper != null){
+                mDatabaseHelper.close();
+            }
         }
-
-        Tools.log(scores.get(0) + " ranking score");
         ScoreAdapter adapter = new ScoreAdapter(scores);
         recyclerView.setAdapter(adapter);
     }
@@ -76,8 +93,8 @@ public class ScoreboardActivity extends AppCompatActivity {
     }
 
     class ScoreAdapter extends RecyclerView.Adapter<ScoreViewHolder>{
-        private ArrayList<Integer> score;
-        ScoreAdapter(ArrayList<Integer> score){
+        private ArrayList<String> score;
+        ScoreAdapter(ArrayList<String> score){
             super();
             this.score = score;
         }
@@ -91,9 +108,8 @@ public class ScoreboardActivity extends AppCompatActivity {
         @Override public void onBindViewHolder(@NonNull final ScoreViewHolder viewHolder, final int position){
             // Set User values in ranking layout
             viewHolder.rank.setText(String.valueOf(position + 1));
-            for(int i = 0; i < scores.size(); i++) {
-                viewHolder.score.setText(String.valueOf(scores.get(i)));
-            }
+
+            viewHolder.score.setText(scores.get(position) + "  points");
         }
 
         @Override public int getItemCount() { return score.size(); }

@@ -53,9 +53,6 @@ public class StatsActivity extends AppCompatActivity {
         maxInputs = findViewById(R.id.lblMaxInputsStat);
         maxInputs.setText(String.valueOf(stats.getIpsMax()));
 
-        avgInputs = findViewById(R.id.lblAvgInputsStat);
-        avgInputs.setText(String.valueOf(stats.getIpsAvg()));
-
         wordStreak = findViewById(R.id.lblWordStreakStat);
         wordStreak.setText(String.valueOf(stats.getHiStreakWord()));
 

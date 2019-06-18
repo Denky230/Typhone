@@ -1,7 +1,7 @@
 package com.stucom.grupo4.typhone.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.stucom.grupo4.typhone.R;
 import com.stucom.grupo4.typhone.control.AudioController;
-import com.stucom.grupo4.typhone.control.GameController;
 import com.stucom.grupo4.typhone.model.Stats;
+import com.stucom.grupo4.typhone.tools.DatabaseHelper;
 import com.stucom.grupo4.typhone.tools.Tools;
 import com.stucom.grupo4.typhone.views.EventView;
 import com.stucom.grupo4.typhone.views.WordTimerView;
@@ -28,13 +28,15 @@ import java.util.Locale;
 public class PlayActivity extends AppCompatActivity
         implements WordToTypeView.WordListener, WordTimerView.WordTimerListener {
 
+    // Database
+    private DatabaseHelper mDatabaseHelper;
+
     // Game timer
     private final int GAME_TIME_SECONDS = 60;
     private final int TIMER_INTERVAL_MILLISECONDS = 1000;
     private int lastRemainingMs;
     private TextView txtGameTimer;
     private CountDownTimer timer;
-
 
     // Score
     private final int RIGHT_INPUT = 10;
@@ -90,6 +92,9 @@ public class PlayActivity extends AppCompatActivity
         // Set total game time
         lastRemainingMs = GAME_TIME_SECONDS * 1000;
         txtGameTimer.setText(String.valueOf(GAME_TIME_SECONDS));
+
+        // Initiates db
+        mDatabaseHelper = new DatabaseHelper(this);
 
         // Load Default words
         readWordPool();
@@ -147,11 +152,14 @@ public class PlayActivity extends AppCompatActivity
         // Set game score to game stats
         stats.setScore(this.score);
 
-        // Shared preferences to save the score
-        SharedPreferences prefs = getSharedPreferences(getPackageName(), MODE_PRIVATE);
-        SharedPreferences.Editor ed = prefs.edit();
-        ed.putInt("score", this.score);
-        ed.apply();
+        addNewScore();
+
+        Tools.log("max words: " + words);
+        Tools.log("max letters: " + letters);
+
+        // Assign max streaks to stats
+        stats.setHiStreakWord(words);
+        stats.setHiStreakLetter(letters);
 
         // Send to FinalActivity
         Intent intent = new Intent(PlayActivity.this, StatsActivity.class);
@@ -183,10 +191,7 @@ public class PlayActivity extends AppCompatActivity
         }.start();
     }
 
-    /**
-     * Pull non-repeated random word from wordPool.
-     * @return random non-repeated word from wordPool
-     */
+    // Pull non-repeated random word from wordPool
     private String pullWordFromWordPool() {
         // Keep pulling til non-repeated word comes out
         String randWord;
@@ -232,6 +237,34 @@ public class PlayActivity extends AppCompatActivity
         }
     }
 
+    // Add score to SQLite
+    private void addNewScore(){
+        //TODO fucnion que cheque la bbdd si el score obtenido es mas grande que los otros
+        Cursor data = mDatabaseHelper.getData();
+        // Si no es null o si esta vacia
+        if(data.moveToFirst() && data.getCount() >= 3){
+
+            do{
+                // Sobreescribe todas las puntuaciones... Change
+                if (this.score > Integer.parseInt(data.getString(1))) {
+
+                    Tools.log(data.getString(1) + " scores in database");
+
+                    mDatabaseHelper.removeData(data.getString(1));
+
+                    // SQLite saving score (llamar a una funcion que mire si este score es mas grande que los otros y si eso reemplazarlo)
+                    String saveScore = String.valueOf(this.score);
+                    mDatabaseHelper.addData(saveScore);
+                }
+
+            }while(data.moveToNext());
+
+        }else{
+            Tools.log("this score: " + this.score);
+            mDatabaseHelper.addData(String.valueOf(this.score));
+        }
+    }
+
     // WordToType view
     @Override public void rightInput() {
         updateScore(RIGHT_INPUT);
@@ -265,6 +298,20 @@ public class PlayActivity extends AppCompatActivity
             updateScore(30);
             audio.playSfx(this, AudioController.Music.CASH);
         }
+    }
+
+    int words, letters = 0;
+    @Override public void wordStreak(int word) {
+        if (words < word) {
+            words = word;
+        }
+        Tools.log("adding word " + word);
+    }
+    @Override public void letterStreak(int letter) {
+        if (letters < letter) {
+            letters = letter;
+        }
+        Tools.log("adding letter: " + letter);
     }
 
     // WordTimer view

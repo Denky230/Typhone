@@ -73,7 +73,7 @@ public class WordToTypeView extends View {
             word.getLetterAt(cursor).setColor(Style.RIGHT);
             listener.rightInput();
         } else {
-            //should meterlo en una array antes de borrarlo y luego checkar cual es la rachha mas alta
+            listener.letterStreak(letterStreak);
             letterStreak = 0;
             perfect = false;
             word.getLetterAt(cursor).setColor(Style.WRONG);
@@ -83,7 +83,8 @@ public class WordToTypeView extends View {
         if(perfect){
             wordStreak++;
         }else{
-            //should meterlo en una array antes de borrarlo y luego checkar cual es la rachha mas alta
+            // Before setting it to 0 we add it to a variable
+            listener.wordStreak(wordStreak);
             wordStreak = 0;
         }
 
@@ -195,6 +196,8 @@ public class WordToTypeView extends View {
         void rightInput();
         void wrongInput();
         void wordCompleted(boolean perfect);
+        void wordStreak(int word);
+        void letterStreak(int letter);
     }
     protected WordListener listener;
     public void setWordListener(WordListener listener) {

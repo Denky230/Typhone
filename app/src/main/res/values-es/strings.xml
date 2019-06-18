@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="btnHome">Menu</string>
-    <string name="btnLanguages">Español</string>
-    <string name="btnPlay">Jugar</string>
-    <string name="btnReplay">Repetir</string>
-    <string name="btnScore">Puntuación</string>
-    <string name="lblAccuracy">Precisión</string>
-    <string name="lblHighestStreak">Racha más Alta</string>
-    <string name="lblInputsPerSecond">Entradas / Segundo</string>
-    <string name="lblLetter">Letra</string>
-    <string name="lblMusic">Música</string>
-    <string name="lblScore">Puntuación</string>
-    <string name="lblTotalInputs">Entradas Totales</string>
-    <string name="lblWord">Palabra</string>
+<string name="app_name" translatable="false">Typhone</string>
+<string name="btnPlay">Jugar</string>
+<string name="btnScore">Puntuación</string>
+<string name="lblMusic">Música</string>
+<string name="btnLanguages">Español</string>
+<string name="lblHighscore" translatable="false">HighScore</string>
+<string name="lblScore">Puntuación</string>
+<string name="lblTotalInputs">Entradas Totales</string>
+<string name="lblAccuracy">Presición</string>
+<string name="lblInputsPerSecond">Entradas / Segundo</string>
+<string name="lblHighestStreak">Racha más Alta</string>
+<string name="lblWord">Palabra</string>
+<string name="lblLetter">Letra</string>
+<string name="btnReplay">Repetir</string>
+<string name="btnHome">Menú</string>
 </resources>
