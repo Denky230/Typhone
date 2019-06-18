@@ -11,13 +11,12 @@
         android:id="@+id/switchMusic"
         android:layout_width="wrap_content"
         android:layout_height="24dp"
-        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:checked="true"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/lblMusic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.083"
+        app:layout_constraintHorizontal_bias="0.35"
         app:layout_constraintStart_toEndOf="@+id/lblMusic"
         app:layout_constraintTop_toTopOf="@+id/lblMusic" />
 
@@ -25,15 +24,11 @@
         android:id="@+id/switchSfx"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:checked="true"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/sound_effects_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.064"
-        app:layout_constraintStart_toEndOf="@+id/sound_effects_title"
+        app:layout_constraintStart_toStartOf="@+id/switchMusic"
         app:layout_constraintTop_toTopOf="@+id/sound_effects_title"
         app:layout_constraintVertical_bias="0.102" />
 
@@ -41,17 +36,13 @@
         android:id="@+id/sound_effects_title"
         android:layout_width="77dp"
         android:layout_height="32dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="SFX"
         android:textColor="#F8020202"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.411"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/lblMusic"
         app:layout_constraintTop_toBottomOf="@+id/lblMusic"
         app:layout_constraintVertical_bias="0.1" />
 
@@ -72,21 +63,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView4"
         app:layout_constraintVertical_bias="0.110000014" />
-
-    <Button
-        android:id="@+id/btnLanguages"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="English"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sound_effects_title"
-        app:layout_constraintVertical_bias="0.3" />
 
     <ImageView
         android:id="@+id/imageView4"

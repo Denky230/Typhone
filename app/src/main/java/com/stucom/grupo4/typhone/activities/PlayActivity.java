@@ -2,6 +2,7 @@ package com.stucom.grupo4.typhone.activities;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -50,7 +51,7 @@ public class PlayActivity extends AppCompatActivity
     private List<String> wordPool;
 
     // WordTimer
-    public static int LETTER_TIME_MILLISECONDS = 300;
+    public static int LETTER_TIME_MILLISECONDS = 350;
     private WordTimerView wordTimerView;
 
     // WordToType
@@ -203,7 +204,6 @@ public class PlayActivity extends AppCompatActivity
         // Save word pulled so the process can be repeated
         lastWord = randWord;
 
-        randWord = "palabrajodidamentelarga";
         return randWord;
     }
     private void updateWordToType() {
@@ -238,31 +238,41 @@ public class PlayActivity extends AppCompatActivity
     }
 
     // Add score to SQLite
-    private void addNewScore(){
-        //TODO fucnion que cheque la bbdd si el score obtenido es mas grande que los otros
-        Cursor data = mDatabaseHelper.getData();
+    private void addNewScore() {
+        if (this.score == 0) return;
+
+        SQLiteDatabase sdb = mDatabaseHelper.getReadableDatabase();
+        Cursor data = sdb.rawQuery("SELECT score FROM scoreboard ORDER BY CAST (score AS INTEGER) DESC;", null);
+        data.moveToFirst();
+
         // Si no es null o si esta vacia
-        if(data.moveToFirst() && data.getCount() >= 3){
+        if (data.getCount() >= 10) {
 
-            do{
+            do {
                 // Sobreescribe todas las puntuaciones... Change
-                if (this.score > Integer.parseInt(data.getString(1))) {
+                if (this.score > Integer.parseInt(data.getString(data.getColumnIndex("score")))) {
 
-                    Tools.log(data.getString(1) + " scores in database");
+                    // SQLite replace scores
+                    String holder, score = String.valueOf(this.score);
+                    do {
 
-                    mDatabaseHelper.removeData(data.getString(1));
+                        holder = data.getString(data.getColumnIndex("score"));
+                        mDatabaseHelper.removeData(holder);
+                        mDatabaseHelper.addData(score);
+                        score = holder;
 
-                    // SQLite saving score (llamar a una funcion que mire si este score es mas grande que los otros y si eso reemplazarlo)
-                    String saveScore = String.valueOf(this.score);
-                    mDatabaseHelper.addData(saveScore);
+                    } while (data.moveToNext());
+
+                    return;
                 }
 
-            }while(data.moveToNext());
+            } while (data.moveToNext());
 
-        }else{
-            Tools.log("this score: " + this.score);
+        } else {
             mDatabaseHelper.addData(String.valueOf(this.score));
         }
+
+        data.close();
     }
 
     // WordToType view
@@ -292,9 +302,7 @@ public class PlayActivity extends AppCompatActivity
             }
         }.start();
 
-        Tools.log("this is " + perfect);
-
-        if(perfect){
+        if (perfect){
             updateScore(30);
             audio.playSfx(this, AudioController.Music.CASH);
         }

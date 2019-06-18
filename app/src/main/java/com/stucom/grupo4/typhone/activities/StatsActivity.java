@@ -1,6 +1,8 @@
 package com.stucom.grupo4.typhone.activities;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,17 +12,25 @@ import android.widget.TextView;
 
 import com.stucom.grupo4.typhone.R;
 import com.stucom.grupo4.typhone.model.Stats;
+import com.stucom.grupo4.typhone.tools.DatabaseHelper;
 
 public class StatsActivity extends AppCompatActivity {
 
-    private TextView grade, highScore, score, totalInputs, maxInputs, avgInputs, wordStreak, letterStreak, accuracyPercentage;
+    private TextView grade, highScore, score, totalInputs, wordStreak, letterStreak, accuracyPercentage;
     private ProgressBar accuracy;
     private Stats stats;
+
+    private DatabaseHelper mDatabaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
+
+        mDatabaseHelper = new DatabaseHelper(this);
+        SQLiteDatabase sdb = mDatabaseHelper.getReadableDatabase();
+        Cursor data = sdb.rawQuery("SELECT score FROM scoreboard ORDER BY CAST (score AS INTEGER) DESC;", null);
+        data.moveToFirst();
 
         // Retrieve stats object
         stats = (Stats) getIntent().getSerializableExtra("stats");
@@ -30,6 +40,7 @@ public class StatsActivity extends AppCompatActivity {
         grade.setText(getGradeByScore());
 
         highScore = findViewById(R.id.lblHighScoreStat);
+        highScore.setText(data.getString(data.getColumnIndex("score")));
 
         score = findViewById(R.id.lblScoreStat);
         score.setText(String.valueOf(stats.getScore()));
@@ -41,41 +52,18 @@ public class StatsActivity extends AppCompatActivity {
         accuracy.setMax(100);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             accuracy.setProgress((int)stats.getAccuracy(), true);
-        }else {
+        } else {
             accuracy.setProgress((int)stats.getAccuracy());
         }
 
         accuracyPercentage = findViewById(R.id.lblAccuracyPercentage);
         accuracyPercentage.setText( (Float.isNaN(stats.getAccuracy()) ? 0 : stats.getAccuracy()) + "%");
 
-        //TODO still needs max & avg inputs and word & letter streak
-
-        maxInputs = findViewById(R.id.lblMaxInputsStat);
-        maxInputs.setText(String.valueOf(stats.getIpsMax()));
-
         wordStreak = findViewById(R.id.lblWordStreakStat);
         wordStreak.setText(String.valueOf(stats.getHiStreakWord()));
 
         letterStreak = findViewById(R.id.lblLetterStreakStat);
         letterStreak.setText(String.valueOf(stats.getHiStreakLetter()));
-/*
-        fullActivity = findViewById(R.id.entireView);
-        fullActivity.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
-
-                    Intent intent = new Intent(StatsActivity.this, FinalActivity.class);
-                    startActivity(intent);
-                    //Fade this activity and
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-
-                    return true;
-                }
-                return false;
-            }
-        });
-*/
 
         // Replay button
         findViewById(R.id.btnReplay).setOnClickListener(new View.OnClickListener() {

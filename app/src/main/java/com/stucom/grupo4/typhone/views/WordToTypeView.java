@@ -80,9 +80,9 @@ public class WordToTypeView extends View {
             listener.wrongInput();
         }
 
-        if(perfect){
+        if( perfect) {
             wordStreak++;
-        }else{
+        } else {
             // Before setting it to 0 we add it to a variable
             listener.wordStreak(wordStreak);
             wordStreak = 0;
