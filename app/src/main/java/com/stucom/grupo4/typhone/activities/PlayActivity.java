@@ -65,6 +65,8 @@ public class PlayActivity extends AppCompatActivity
     // When a word is completed, briefly block game
     private boolean wordCompleted;
 
+    private int counter = 0;
+
     private AudioController audio;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -305,6 +307,10 @@ public class PlayActivity extends AppCompatActivity
         if (perfect){
             updateScore(30);
             audio.playSfx(this, AudioController.Music.CASH);
+            counter++;
+        } else {
+            wordStreak(counter);
+            counter = 0;
         }
     }
 
