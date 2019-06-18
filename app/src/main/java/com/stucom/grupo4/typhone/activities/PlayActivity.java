@@ -2,13 +2,11 @@ package com.stucom.grupo4.typhone.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.stucom.grupo4.typhone.R;
@@ -31,11 +29,12 @@ public class PlayActivity extends AppCompatActivity
         implements WordToTypeView.WordListener, WordTimerView.WordTimerListener {
 
     // Game timer
-    private final int GAME_TIME_SECONDS = 30;
+    private final int GAME_TIME_SECONDS = 60;
     private final int TIMER_INTERVAL_MILLISECONDS = 1000;
     private int lastRemainingMs;
     private TextView txtGameTimer;
     private CountDownTimer timer;
+
 
     // Score
     private final int RIGHT_INPUT = 10;
@@ -48,10 +47,11 @@ public class PlayActivity extends AppCompatActivity
     // Word pool currently pulling from
     private List<String> wordPool;
 
-    // WordTimer view
+    // WordTimer
+    public static int LETTER_TIME_MILLISECONDS = 300;
     private WordTimerView wordTimerView;
 
-    // WordToType view
+    // WordToType
     private WordToTypeView wordView;
     private TextView nextWord;
     private String lastWord;
@@ -62,12 +62,7 @@ public class PlayActivity extends AppCompatActivity
     // When a word is completed, briefly block game
     private boolean wordCompleted;
 
-    // On word compleated correctly
     private AudioController audio;
-
-
-    // counter
-    int counter = 0;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,11 +119,6 @@ public class PlayActivity extends AppCompatActivity
     }
     @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-        //TODO function for each 1000 milis que vaya sumando un contador para los inputs/second
-        //llamar desde aqui a la función i que guarde en un arraylist<int> las keys que ha tocado x segundo
-        counter = 0;
-        inputsXSecond(keyCode);
-
         if (!wordCompleted) {
             // Get user input letter
             String key = KeyEvent.keyCodeToString(keyCode);
@@ -142,10 +132,6 @@ public class PlayActivity extends AppCompatActivity
         }
 
         return super.onKeyDown(keyCode, event);
-    }
-
-    private void inputsXSecond(int inputs){
-        //for(int i= tiempox; i <tiempoy ; i++){ counter=+inputs } maybe?
     }
 
     private void startGame() {
@@ -212,6 +198,7 @@ public class PlayActivity extends AppCompatActivity
         // Save word pulled so the process can be repeated
         lastWord = randWord;
 
+        randWord = "palabrajodidamentelarga";
         return randWord;
     }
     private void updateWordToType() {
@@ -222,7 +209,7 @@ public class PlayActivity extends AppCompatActivity
         wordView.setWordToType(currWord);
 
         // Pass time to type current word to WordTimerView
-        int currWordTotalMs = GameController.LETTER_TIME_MILLISECONDS * currWord.length();
+        int currWordTotalMs = LETTER_TIME_MILLISECONDS * currWord.length();
         wordTimerView.startTimer(currWordTotalMs);
 
         // Get random new word

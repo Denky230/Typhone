@@ -11,9 +11,6 @@ import java.util.Set;
 
 public class GameController {
 
-    // Word timer
-    public static int LETTER_TIME_MILLISECONDS = 250;
-
     // Modifiers
     private WordModifier[] modifiers;           // game modifiers
     private Set<Modifier> activeModifiers;      // currently active
@@ -31,8 +28,8 @@ public class GameController {
 
     private void initWordModifiers() {
         this.modifiers = new WordModifier[] {
-                new MirroredWords(R.drawable.settings),
-                new BlinkingWords(R.drawable.settings)
+                new MirroredWords(R.drawable.mirrored_words)
+//                new BlinkingWords(R.drawable.blinking_words)
         };
     }
 

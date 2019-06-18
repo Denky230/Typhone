@@ -21,10 +21,10 @@ public class WordToTypeView extends View {
 
     private final GameController gameController;
 
-    private Word word;      // Word to type
-    private int cursor;     // Current letter index
-    private boolean perfect; //Word correct
-    private int wordStreak = 0, letterStreak = 0; // Streak
+    private Word word;          // Word to type
+    private int cursor;         // Current letter index
+    private boolean perfect;    // Word correct
+    private int wordStreak = 0, letterStreak = 0;
 
     private final TextPaint paint;
 
@@ -103,77 +103,6 @@ public class WordToTypeView extends View {
     }
 
     @Override protected void onDraw(Canvas canvas) {
-        drawTest(canvas);
-    }
-
-    // region drawBien
-//    private void drawBien(Canvas canvas) {
-//        // Save word rect on wordBounds
-//        paint.getTextBounds(word, 0, word.length(), wordBounds);
-//
-//        // Center word's Y
-//        float y = getMinimumHeight()
-//                + (float) wordBounds.height() / 2 + (float) getHeight() / 2;
-//
-//        // Figure out word's X
-//        // Check if word fits in view
-//        float wordWidth = paint.measureText(word);
-//        if (wordWidth < getWidth()) {
-//
-//            // Center word's X
-//            x = (getWidth() - wordWidth) / 2;
-//
-//        } else {
-//
-//            // Update word's X so current letter is always on screen
-//            float screenThreshold = (float) (getWidth() * 0.6);
-//            float writtenLettersWidth = paint.measureText(word.substring(0, cursor));
-//            float xOffset = screenThreshold - writtenLettersWidth;
-//            float wordEnd = x + wordBounds.width();
-//
-//            // Check if writtenLettersWidth has reached screenThreshold
-//            if (xOffset < 0) {
-//                // Check if word goes out of screen
-//                if (wordEnd > getWidth()) {
-//                    x = xOffset;
-//                }
-//            } else {
-//                x = 0;
-//            }
-//
-//            // region TEST - Bars
-//            // View
-//            paint.setColor(Color.CYAN);
-//            canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
-//            // Word
-//            paint.setColor(Color.LTGRAY);
-//            canvas.drawRect(x, y - wordBounds.height(), wordEnd, y, paint);
-//            // Written letters
-//            paint.setColor(Color.YELLOW);
-//            canvas.drawRect(x, y, writtenLettersWidth, getHeight(), paint);
-//            // Threshold
-//            paint.setColor(Color.MAGENTA);
-//            canvas.drawRect(screenThreshold ,0, screenThreshold + 5, getHeight(), paint);
-//
-//            paint.setColor(Color.BLACK);
-//        }
-//
-//        // Draw letters
-//        char[] letters = word.toCharArray();
-//        for (int i = 0; i < letters.length; i++) {
-//            // Draw text in corresponding color
-//            paint.setColor(wordColors[i]);
-//            canvas.drawText(String.valueOf(letters[i]), x, y, paint);
-//
-//            // Get letter width
-//            float w = paint.measureText(String.valueOf(letters[i]));
-//            // Move position to next letter
-//            canvas.translate(w, 0);
-//        }
-//    }
-    // endregion
-
-    private void drawTest(Canvas canvas) {
 
         // Save word currently displayed
         String sWord = word.getWord();
